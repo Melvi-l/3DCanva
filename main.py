@@ -46,15 +46,27 @@ cube = TriangleMesh([
 scene.add(cube)
 camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
 renderer = Renderer(canva, width, height)
-renderer.render(scene, camera)
 v=Vector3(1,0,0)
-# renderer.getDrawPosition(v, Matrix4.identity(), camera.projectionMatrix)
+renderer.getDrawPosition(v, Matrix4.identity(), camera.projectionMatrix)
+speed = 0.1
 def tick():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    cube.applyRotation(Vector3(0,1,0), speed)
+                if event.key == pygame.K_RIGHT:
+                    cube.applyRotation(Vector3(0,1,0), -speed)
+                if event.key == pygame.K_UP:
+                    cube.applyRotation(Vector3(1,0,0), -speed)
+                if event.key == pygame.K_DOWN:
+                    cube.applyRotation(Vector3(1,0,0), speed)
+                
+                
+        canva.fill(background)
+        renderer.render(scene, camera)
         pygame.display.flip()
 tick()

@@ -18,5 +18,8 @@ class TriangleMesh:
     def applyTranslation(self,translationVector: Vector3):
         translationMatrix = Matrix4.translation(translationVector)
         self.modelMatrix.multiplyMatrix(translationMatrix)
-    def applyRotation(self, rotationAxis: Vector3):
-        return
+    def applyRotation(self, rotationAxis: Vector3, angle):
+        rotationMatrix = Matrix4.rotation(rotationAxis, angle)
+        # self.modelMatrix.multiplyMatrix(rotationMatrix)
+        rotationMatrix.multiplyMatrix(self.modelMatrix)
+        self.modelMatrix.copy(rotationMatrix)

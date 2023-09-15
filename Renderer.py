@@ -54,8 +54,8 @@ class Renderer:
                 computeVertex[indexB] = self.getDrawPosition(vertexList[face[indexB]], modelMatrix, projectionMatrix) 
             vertexB = computeVertex[indexB]
 
-            print("inp", vertexList[face[indexA]], vertexList[face[indexB]])
-            print("seg", vertexA, vertexB)
+            # print("inp", vertexList[face[indexA]], vertexList[face[indexB]])
+            # print("seg", vertexA, vertexB)
             self.drawEdge(vertexA, vertexB)
 
     def getDrawPosition(self, vertex: Vector3, modelMatrix: Matrix4, projectionMatrix: Matrix4):

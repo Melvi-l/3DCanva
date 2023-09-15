@@ -1,3 +1,4 @@
+from math import cos, sin
 from typing import List
 
 
@@ -51,6 +52,24 @@ class Matrix4:
             0,0,0,translationVector.z,
             0,0,0,1
         ) 
+    
+    @classmethod
+    def rotation(matrixClass, rotationAxis, angle):
+        result = matrixClass(
+            rotationAxis.x**2,rotationAxis.x*rotationAxis.y,rotationAxis.x*rotationAxis.z,0,
+            rotationAxis.y*rotationAxis.y, rotationAxis.y**2, rotationAxis.y*rotationAxis.z,0,
+            rotationAxis.x*rotationAxis.z, rotationAxis.y*rotationAxis.z, rotationAxis.z**2,0,
+            0,0,0,1/(1-cos(angle))
+        )
+        result.multiplyScalar(1-cos(angle))
+        result.addMatrix(Matrix4(
+            cos(angle), rotationAxis.z*sin(angle), -rotationAxis.y*sin(angle),0,
+            -rotationAxis.z*sin(angle), cos(angle), rotationAxis.x*sin(angle),0,
+            rotationAxis.y*sin(angle), -rotationAxis.x*sin(angle), cos(angle),0,
+            0,0,0,0
+        ))
+        print(result)
+        return result
 
     @classmethod
     def identity(matrixClass):
@@ -122,6 +141,27 @@ class Matrix4:
         temp.dw = self.aw * matrix.dx + self.bw * matrix.dy + self.cw * matrix.dz + self.dw * matrix.dw
 
         self.copy(temp)
+
+    def addMatrix(self, matrix: 'Matrix4'):
+        self.ax += matrix.ax
+        self.bx += matrix.bx
+        self.cx += matrix.cx
+        self.dx += matrix.dx
+
+        self.ay += matrix.ay
+        self.by += matrix.by
+        self.cy += matrix.cy
+        self.dy += matrix.dy
+
+        self.az += matrix.az
+        self.bz += matrix.bz
+        self.cz += matrix.cz
+        self.dz += matrix.dz
+
+        self.aw += matrix.aw
+        self.bw += matrix.bw
+        self.cw += matrix.cw
+        self.dw += matrix.dw
 
     def getInverse(self) -> 'Matrix4':
 
