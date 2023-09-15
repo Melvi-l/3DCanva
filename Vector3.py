@@ -1,8 +1,5 @@
 from math import sqrt
 
-from Vector4 import Vector4
-
-
 class Vector3:
     def __init__(self, x, y, z) -> None:
         self.x = x
@@ -38,7 +35,8 @@ class Vector3:
         self.y += vector.y
         self.z += vector.z
 
-    def toHomogenous(self) -> Vector4:
+    def toHomogenous(self):
+        from Vector4 import Vector4
         return Vector4(self.x,self.y,self.z,1)
     
     @staticmethod
@@ -52,4 +50,7 @@ class Vector3:
             vectorA.z * vectorB.x - vectorA.x * vectorB.z, 
             vectorA.x * vectorB.y - vectorA.y * vectorB.x
         )
+    
+    def __str__(self) -> str:
+        return f"Vector3({self.x}, {self.y}, {self.z})"
     

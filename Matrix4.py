@@ -43,6 +43,24 @@ class Matrix4:
 
         return matrix
 
+    @classmethod
+    def translation(matrixClass, translationVector):
+        return matrixClass(
+            0,0,0,translationVector.x,
+            0,0,0,translationVector.y,
+            0,0,0,translationVector.z,
+            0,0,0,1
+        ) 
+
+    @classmethod
+    def identity(matrixClass):
+        return matrixClass(
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+        )
+
     def getDeterminant(self) -> float:
         matrixList = self.toList()
         determinant = 0.

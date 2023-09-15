@@ -1,5 +1,4 @@
 from math import sqrt
-from Vector3 import Vector3
 from Matrix4 import Matrix4
 
 
@@ -45,19 +44,22 @@ class Vector4:
         self.w += vector.w
 
     def multiplyMatrix4(self, matrix: Matrix4):
-        temp = Vector4()
-        x = self.x * matrix.ax + self.y * matrix.ay + self.z * matrix.az + self.w * matrix.aw 
-        y = self.x * matrix.bx + self.y * matrix.by + self.z * matrix.bz + self.w * matrix.bw 
-        z = self.x * matrix.cx + self.y * matrix.cy + self.z * matrix.cz + self.w * matrix.cw 
-        w = self.x * matrix.dx + self.y * matrix.dy + self.z * matrix.dz + self.w * matrix.dw 
-        self.copy(temp)
+        x = self.x * matrix.ax + self.y * matrix.bx + self.z * matrix.cx + self.w * matrix.dx
+        y = self.x * matrix.ay + self.y * matrix.by + self.z * matrix.cy + self.w * matrix.dy
+        z = self.x * matrix.az + self.y * matrix.bz + self.z * matrix.cz + self.w * matrix.dz
+        w = self.x * matrix.aw + self.y * matrix.bw + self.z * matrix.cw + self.w * matrix.dw
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
 
     def copy(self, vector):
         self.x = vector.x
         self.y = vector.y
         self.z = vector.z
         self.w = vector.w        
-    def toCarthesian(self) -> Vector3:
+    def toCarthesian(self):
+        from Vector3 import Vector3
         return Vector3(self.x/self.w, self.y/self.w, self.z/self.w)
     def __str__(self) -> str:
         return f"Vector4({self.x}, {self.y}, {self.z}, {self.w})"
