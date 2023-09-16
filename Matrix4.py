@@ -45,6 +45,15 @@ class Matrix4:
         return matrix
 
     @classmethod
+    def scale(matrixClass, scald):
+        return matrixClass(
+            scale,0,0,0,
+            0,scale,0,0,
+            0,0,scale,0,
+            0,0,0,1
+        )
+    
+    @classmethod
     def translation(matrixClass, translationVector):
         return matrixClass(
             0,0,0,translationVector.x,
