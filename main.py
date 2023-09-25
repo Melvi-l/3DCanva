@@ -1,3 +1,4 @@
+from math import pi
 import sys
 import pygame
 from debug.GUI import GUI
@@ -7,6 +8,7 @@ from graphic.Renderer import Renderer
 from graphic.Scene import Scene
 from graphic.TriangleMesh import TriangleMesh
 from geom.Vector3 import Vector3
+from rotation.Quaternion import Quaternion
 
 
 pygame.init()
@@ -51,6 +53,16 @@ renderer = Renderer(canva, width, height)
 v=Vector3(1,0,0)
 renderer.getDrawPosition(v, MathMatrix4.identity(), camera.projectionMatrix)
 speed = 0.1
+clock = pygame.time.Clock()
+
+def animateRotation():
+    print("start")
+    cube.animateRotationTo(1, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
+
+
+
+debug.addButton("Slerp", animateRotation)
+
 
 def tick():
     while True:

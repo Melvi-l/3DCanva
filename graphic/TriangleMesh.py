@@ -1,4 +1,6 @@
 from typing import List
+
+import pygame
 from geom.Matrix import Matrix
 from rotation.Euler import Euler
 from rotation.Orientation import Orientation
@@ -53,3 +55,22 @@ class TriangleMesh:
         self.modelMatrix = rotationMatrix.setPosition(self.modelMatrix.getPosition()).multiplyMatrix(self.modelMatrix.setPosition(Vector3()))
         # self.modelMatrix.multiplyMatrix(rotationMatrix)
         return self
+    
+    def getQuaternion(self):
+        return self.modelMatrix.getQuaternion()
+    def setQuaternion(self, quaternion):
+        self.modelMatrix.setQuaternion(quaternion)
+        return self
+        
+
+    def animateRotationTo(self, duration, endQuaternion):
+        clock = pygame.time.Clock()        
+        startQuaternion = self.getQuaternion()
+        startTime = clock.get_time()
+        while True: 
+            elapsedTime = clock.get_time() - startTime
+            print(clock.get_time())
+            if  elapsedTime > duration:
+                break
+            currentQuaternion = Quaternion.slerp(startQuaternion, endQuaternion, elapsedTime)
+            self.setQuaternion(currentQuaternion)

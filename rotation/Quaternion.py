@@ -19,6 +19,7 @@ class Quaternion:
         quaternion.z *= sin(angle/2)
         return quaternion
 
+
     # Getters
     def getSquareLength(self):
         return self.w**2 + self.x**2 + self.y**2 + self.z**2
@@ -26,16 +27,16 @@ class Quaternion:
         return sqrt(self.getSquareLength())
     def isUnitary(self):
         return self.getSquareLength() == 1 or self.getSquareLength() == 0
-    def getConjugate(cls, self):
+    def getConjugate(self):
         return Quaternion(self.w, -self.x, -self.y, -self.z)
     def getInverse(self):
         conjugate = self.getConjugate()
-        return conjugate / conjugate.getLength()
+        return Quaternion.multiplyScalar(conjugate, 1 / conjugate.getLength()) 
     def getExponentiation(self, exponent):
         if self.isUnitary(): 
             return self
-        alphw = acos(self.w)
-        newAlphw = alpha * exponent
+        alpha = acos(self.w)
+        newAlpha = alpha * exponent
         mult = sin(newAlpha) / sin(alpha)
         return Quaternion(
             cos(newAlpha), 
@@ -92,7 +93,7 @@ class Quaternion:
         return quaternionA.w * quaternionB.w + quaternionA.x * quaternionB.x + quaternionA.y * quaternionB.y + quaternionA.z * quaternionB.z 
     @staticmethod
     def slerp(quaternionA, quaternionB, lerpFactor):
-        difference = Quaternion.zifference(quaternionA, quaternionB)
+        difference = Quaternion.difference(quaternionA, quaternionB)
         exponentiateDifference = difference.getExponentiation(lerpFactor)
         quaternionLerp = Quaternion.multiply(exponentiateDifference, quaternionA)
         return quaternionLerp 
