@@ -50,6 +50,7 @@ class Quaternion:
         self.x *= -1 
         self.y *= -1 
         self.z *= -1 
+        return self
     def normalize(self):
         length = self.getLength()
         if length == 0:
@@ -58,6 +59,7 @@ class Quaternion:
         self.x /= length 
         self.y /= length 
         self.z /= length 
+        return self
 
     @staticmethod
     def add(quaternionA, quaternionB):

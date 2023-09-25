@@ -16,5 +16,22 @@ class Euler:
         pitchMatrix.multiplyMatrix(headingMatrix)
         bankMatrix.multiplyMatrix(pitchMatrix)
         return bankMatrix
+    
+    def multiplyScalar(self, scalar):
+        self.pitch *= scalar
+        self.heading *= scalar
+        self.bank *= scalar
+        return self
+
+    @staticmethod
+    def add(eulerA, eulerB):
+        return Euler(eulerB.pitch + eulerA.pitch, eulerB.heading + eulerA.heading, eulerB.bank + eulerA.bank)
+    @staticmethod
+    def difference(eulerA, eulerB):
+        return Euler(eulerB.pitch - eulerA.pitch, eulerB.heading - eulerA.heading, eulerB.bank - eulerA.bank)
+    @staticmethod
+    def lerp(eulerA, eulerB, lerpFactor):
+        differenceEuler = Euler.difference(eulerA, eulerB)
+        return Euler.add(eulerA, differenceEuler.multiplyScalar())
             
     

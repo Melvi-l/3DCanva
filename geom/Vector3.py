@@ -18,32 +18,33 @@ class Vector3:
 
     def getSquareMagnitude(self) -> float:
         return self.x**2 + self.y**2 + self.z**2
-    
     def getMagnitude(self) -> float:
         return sqrt(self.getSquareMagnitude())
-    
+
     def normalize(self):
-        magnitude = self.getMagitude()
+        magnitude = self.getMagnitude()
         if magnitude == 0:
             return
         self.x /= magnitude
         self.y /= magnitude
         self.z /= magnitude
-
+        return self
     def negate(self):
         self.x = - self.x
         self.y = - self.y
         self.z = - self.z
+        return self
 
     def multiplyScalar(self, scalar: float):
         self.x *= scalar
         self.y *= scalar
         self.z *= scalar
-
+        return self
     def addVector(self, vector: 'Vector3'):
         self.x += vector.x
         self.y += vector.y
         self.z += vector.z
+        return self
 
     def toHomogenous(self):
         from geom.Vector4 import Vector4
@@ -65,3 +66,4 @@ class Vector3:
         return f"Vector3({self.x}, {self.y}, {self.z})"
     def __eq__(self, __value: object) -> bool:
         return self.x == __value.x and self.y == __value.y and self.z == __value.z
+    

@@ -24,24 +24,28 @@ class Vector4:
         self.y /= magnitude
         self.z /= magnitude
         self.w /= magnitude
+        return self
 
     def negate(self):
         self.x = - self.x
         self.y = - self.y
         self.z = - self.z
         self.w = - self.w
+        return self
         
     def multiplyScalar(self, scalar: float):
         self.x *= scalar
         self.y *= scalar
         self.z *= scalar
         self.w *= scalar
+        return self
 
     def addVector(self, vector: 'Vector4'):
         self.x += vector.x
         self.y += vector.y
         self.z += vector.z
         self.w += vector.w
+        return self
 
     def multiplyMatrix4(self, matrix: Matrix4):
         x = self.x * matrix.ax + self.y * matrix.bx + self.z * matrix.cx + self.w * matrix.dx
@@ -52,12 +56,15 @@ class Vector4:
         self.y = y
         self.z = z
         self.w = w
+        return self
 
     def copy(self, vector):
         self.x = vector.x
         self.y = vector.y
         self.z = vector.z
-        self.w = vector.w        
+        self.w = vector.w   
+        return self
+
     def toCarthesian(self):
         from geom.Vector3 import Vector3
         return Vector3(self.x/self.w, self.y/self.w, self.z/self.w)

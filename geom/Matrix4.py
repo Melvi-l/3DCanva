@@ -136,7 +136,7 @@ class Matrix4:
         self.cw *= scalar
         self.dw *= scalar
 
-        return 
+        return self
 
     def multiplyMatrix(self, matrix: 'Matrix4'):
         temp = Matrix4()
@@ -162,6 +162,8 @@ class Matrix4:
 
         self.copy(temp)
 
+        return self
+
     def addMatrix(self, matrix: 'Matrix4'):
         self.ax += matrix.ax
         self.bx += matrix.bx
@@ -182,6 +184,8 @@ class Matrix4:
         self.bw += matrix.bw
         self.cw += matrix.cw
         self.dw += matrix.dw
+
+        return self
 
     def getTranspose(self):
         return Matrix4 (
@@ -243,6 +247,7 @@ class Matrix4:
         self.bw = matrix.bw
         self.cw = matrix.cw
         self.dw = matrix.dw
+        return self
     
     def toList(self) -> List[List[float]]:
         return [
