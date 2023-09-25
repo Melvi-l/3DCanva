@@ -30,12 +30,12 @@ class Matrix4:
         self.dw = dw
 
     @classmethod
-    def fromList(matrixClass, listMatrix):
+    def fromList(cls, listMatrix):
 
         if len(listMatrix) != 4 or any(len(row) != 4 for row in listMatrix):
             raise ValueError("Must be a 4x4 matrix !")
 
-        matrix = matrixClass()
+        matrix = cls()
 
         matrix.ax, matrix.bx, matrix.cx, matrix.dx = listMatrix[0]
         matrix.ay, matrix.by, matrix.cy, matrix.dy = listMatrix[1]
@@ -44,8 +44,19 @@ class Matrix4:
 
         return matrix
 
+    # to delete maybe
     @classmethod
-    def scale(matrixClass, scald):
+    def fromQuaternion(cls, quaternion):
+        w, x, y, z = quaternion.w, quaternion.x, quaternion.y, quaternion.z
+        return Matrix4(
+            1 - 2*y**2 - 2*z**2, 2*x*y + 2*w*z, 2*x*z - 2*w*y, 0,
+            2*x*y - 2*w*z, 1 - 2*x**2 -2*z**2, 2*y*z + 2*w*x, 0,
+            2*x*z + 2*w*y, 2*y*z - 2*w*x, 1 - 2*x**2 - 2*y**2, 0,
+            0, 0, 0, 1
+        )
+
+    @classmethod
+    def scale(matrixClass, scale):
         return matrixClass(
             scale,0,0,0,
             0,scale,0,0,
@@ -56,9 +67,9 @@ class Matrix4:
     @classmethod
     def translation(matrixClass, translationVector):
         return matrixClass(
-            0,0,0,translationVector.x,
-            0,0,0,translationVector.y,
-            0,0,0,translationVector.z,
+            1,0,0,translationVector.x,
+            0,1,0,translationVector.y,
+            0,0,1,translationVector.z,
             0,0,0,1
         ) 
     

@@ -64,7 +64,22 @@ def tick():
                     cube.applyRotation(Vector3(1,0,0), -speed)
                 if event.key == pygame.K_DOWN:
                     cube.applyRotation(Vector3(1,0,0), speed)
-                
+                    
+                if event.key == pygame.K_KP_PLUS:
+                    cube.applyScale(1.1)
+                if event.key == pygame.K_KP_MINUS:
+                    cube.applyScale(0.9)
+
+                if event.key == pygame.K_KP_4:
+                    cube.applyTranslation(Vector3(-speed,0,0))
+                if event.key == pygame.K_KP_6:
+                    cube.applyTranslation(Vector3(speed,0,0))
+                if event.key == pygame.K_KP_2:
+                    cube.applyTranslation(Vector3(0,speed,0))
+                if event.key == pygame.K_KP_8:
+                    cube.applyTranslation(Vector3(0,-speed,0))
+
+        
                 
         canva.fill(background)
         renderer.render(scene, camera)

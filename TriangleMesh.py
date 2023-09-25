@@ -1,5 +1,6 @@
 from typing import List
 from Matrix4 import Matrix4
+from Quaternion import Quaternion
 from Vector3 import Vector3
 
 
@@ -15,11 +16,16 @@ class TriangleMesh:
         self.modelMatrix.dx = position.x 
         self.modelMatrix.dy = position.y 
         self.modelMatrix.dz = position.z 
+    def applyScale(self, scaleFactor: float):
+        scaleMatrix = Matrix4.scale(scaleFactor)
+        self.modelMatrix.multiplyMatrix(scaleMatrix)
     def applyTranslation(self,translationVector: Vector3):
         translationMatrix = Matrix4.translation(translationVector)
         self.modelMatrix.multiplyMatrix(translationMatrix)
     def applyRotation(self, rotationAxis: Vector3, angle):
-        rotationMatrix = Matrix4.rotation(rotationAxis, angle)
-        # self.modelMatrix.multiplyMatrix(rotationMatrix)
-        rotationMatrix.multiplyMatrix(self.modelMatrix)
-        self.modelMatrix.copy(rotationMatrix)
+        # Matrix
+        # rotationMatrix = Matrix4.rotation(rotationAxis, angle)
+        # Quaternion
+        quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
+        rotationMatrix = quaternion.toRotationMatrix()
+        self.modelMatrix.multiplyMatrix(rotationMatrix)
