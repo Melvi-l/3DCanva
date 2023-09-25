@@ -28,15 +28,15 @@ class TriangleMesh:
         # rotationMatrix = Matrix4.rotation(rotationAxis, angle)
 
         # Euler 
-        # euler = Euler()
-        # if rotationAxis == Vector3.xAxis():
-        #     euler = Euler(angle, 0, 0)
-        # if rotationAxis == Vector3.yAxis():
-        #     euler = Euler(0, angle, 0)
-        # if rotationAxis == Vector3.xAxis():
-        #     euler = Euler(0, 0, angle)
-        # rotationMatrix = euler.toRotationMatrix()
-        
+        euler = Euler()
+        if rotationAxis == Vector3.xAxis():
+            euler = Euler(angle, 0, 0)
+        if rotationAxis == Vector3.yAxis():
+            euler = Euler(0, angle, 0)
+        if rotationAxis == Vector3.xAxis():
+            euler = Euler(0, 0, angle)
+        rotationMatrix = euler.toRotationMatrix()
+
         # Quaternion
         # quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
         # rotationMatrix = quaternion.toRotationMatrix()
