@@ -1,6 +1,6 @@
 from typing import List
-from Matrix4 import Matrix4
-from TriangleMesh import TriangleMesh
+from geom.Matrix4 import Matrix4
+from graphic.TriangleMesh import TriangleMesh
 
 
 class Scene:

@@ -1,7 +1,7 @@
 from typing import List
-from Matrix4 import Matrix4
-from Quaternion import Quaternion
-from Vector3 import Vector3
+from geom.Matrix4 import Matrix4
+from rotation.Quaternion import Quaternion
+from geom.Vector3 import Vector3
 
 
 class TriangleMesh:
@@ -25,6 +25,8 @@ class TriangleMesh:
     def applyRotation(self, rotationAxis: Vector3, angle):
         # Matrix
         # rotationMatrix = Matrix4.rotation(rotationAxis, angle)
+        # Euler 
+        # rotationMatrix = Euler
         # Quaternion
         quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
         rotationMatrix = quaternion.toRotationMatrix()

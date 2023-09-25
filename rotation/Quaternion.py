@@ -1,7 +1,7 @@
 from math import acos, cos, sin, sqrt
-from Matrix4 import Matrix4
+from geom.Matrix4 import Matrix4
 
-from Vector4 import Vector4
+from geom.Vector4 import Vector4
 
 class Quaternion:
     def __init__(self, w=1, x=0, y=0, z=0) -> None:

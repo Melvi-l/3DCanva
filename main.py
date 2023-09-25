@@ -1,11 +1,11 @@
 import sys
 import pygame
-from Camera import OrthographicCamera
-from Matrix4 import Matrix4
-from Renderer import Renderer
-from Scene import Scene
-from TriangleMesh import TriangleMesh
-from Vector3 import Vector3
+from graphic.Camera import OrthographicCamera
+from geom.Matrix4 import Matrix4
+from graphic.Renderer import Renderer
+from graphic.Scene import Scene
+from graphic.TriangleMesh import TriangleMesh
+from geom.Vector3 import Vector3
 
 
 pygame.init()

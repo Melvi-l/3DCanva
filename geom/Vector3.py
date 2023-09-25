@@ -36,7 +36,7 @@ class Vector3:
         self.z += vector.z
 
     def toHomogenous(self):
-        from Vector4 import Vector4
+        from geom.Vector4 import Vector4
         return Vector4(self.x,self.y,self.z,1)
     
     @staticmethod

@@ -1,5 +1,5 @@
 from math import sqrt
-from Matrix4 import Matrix4
+from geom.Matrix4 import Matrix4
 
 
 class Vector4:
@@ -59,7 +59,7 @@ class Vector4:
         self.z = vector.z
         self.w = vector.w        
     def toCarthesian(self):
-        from Vector3 import Vector3
+        from geom.Vector3 import Vector3
         return Vector3(self.x/self.w, self.y/self.w, self.z/self.w)
     def __str__(self) -> str:
         return f"Vector4({self.x}, {self.y}, {self.z}, {self.w})"

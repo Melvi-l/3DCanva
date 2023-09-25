@@ -1,4 +1,4 @@
-from Matrix4 import Matrix4
+from geom.Matrix4 import Matrix4
 
 class OrthographicCamera:
     projectionMatrix: Matrix4
