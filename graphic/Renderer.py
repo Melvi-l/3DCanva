@@ -2,7 +2,7 @@ from typing import List
 
 import pygame
 from graphic.Camera import OrthographicCamera
-from geom.Matrix4 import Matrix4
+from geom.MathMatrix4 import MathMatrix4
 from graphic.Scene import Scene
 from graphic.TriangleMesh import TriangleMesh
 from geom.Vector3 import Vector3
@@ -14,7 +14,7 @@ YELLOW = (255, 226, 82)
 
 class Renderer:
 
-    viewportMatrix: Matrix4
+    viewportMatrix: MathMatrix4
 
     def __init__(self, canva, width: float, height: float) -> None:
         self.initViewportMatrix(width, height)
@@ -26,7 +26,7 @@ class Renderer:
         originY = 0
         nearDepth = 0
         farDepth = 1
-        self.viewportMatrix = Matrix4(
+        self.viewportMatrix = MathMatrix4(
             width/2, 0, 0, originX + width/2,
             0, height/2, 0, originY + height/2,
             0, 0, (farDepth-nearDepth)/2, (nearDepth+farDepth)/2,
@@ -38,11 +38,11 @@ class Renderer:
             self.drawMesh(mesh, camera.projectionMatrix)
         return
     
-    def drawMesh(self, mesh: TriangleMesh, projectionMatrix: Matrix4):
+    def drawMesh(self, mesh: TriangleMesh, projectionMatrix: MathMatrix4):
         for face in mesh.faceList:
             self.drawFace(mesh.vertexList, face, mesh.modelMatrix, projectionMatrix)
         return
-    def drawFace(self, vertexList: List[Vector3], face: List[int], modelMatrix: Matrix4, projectionMatrix: Matrix4):
+    def drawFace(self, vertexList: List[Vector3], face: List[int], modelMatrix: MathMatrix4, projectionMatrix: MathMatrix4):
         computeVertex = [None for _ in range(len(face))] # to reduce pipeline and looping around vertex
         for indexA in range(len(face)):
             if computeVertex[indexA] is None:
@@ -58,7 +58,7 @@ class Renderer:
             # print("seg", vertexA, vertexB)
             self.drawEdge(vertexA, vertexB)
 
-    def getDrawPosition(self, vertex: Vector3, modelMatrix: Matrix4, projectionMatrix: Matrix4):
+    def getDrawPosition(self, vertex: Vector3, modelMatrix: MathMatrix4, projectionMatrix: MathMatrix4):
         vertexHomogenous = vertex.toHomogenous()
         # print(vertexHomogenous)
         vertexHomogenous.multiplyMatrix4(modelMatrix)

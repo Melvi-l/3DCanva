@@ -1,6 +1,5 @@
 from math import acos, cos, sin, sqrt
-from geom.Matrix4 import Matrix4
-
+from geom.Matrix import Matrix
 from geom.Vector4 import Vector4
 
 class Quaternion:
@@ -100,7 +99,7 @@ class Quaternion:
 
     def toRotationMatrix(self):
         w, x, y, z = self.w, self.x, self.y, self.z
-        return Matrix4(
+        return Matrix(
             1 - 2*y**2 - 2*z**2, 2*x*y + 2*w*z, 2*x*z - 2*w*y, 0,
             2*x*y - 2*w*z, 1 - 2*x**2 -2*z**2, 2*y*z + 2*w*x, 0,
             2*x*z + 2*w*y, 2*y*z - 2*w*x, 1 - 2*x**2 - 2*y**2, 0,

@@ -1,5 +1,5 @@
 from math import sqrt
-from geom.Matrix4 import Matrix4
+from geom.MathMatrix4 import MathMatrix4
 
 
 class Vector4:
@@ -43,7 +43,7 @@ class Vector4:
         self.z += vector.z
         self.w += vector.w
         return self
-    def multiplyMatrix4(self, matrix: Matrix4):
+    def multiplyMatrix4(self, matrix: MathMatrix4):
         x = self.x * matrix.ax + self.y * matrix.bx + self.z * matrix.cx + self.w * matrix.dx
         y = self.x * matrix.ay + self.y * matrix.by + self.z * matrix.cy + self.w * matrix.dy
         z = self.x * matrix.az + self.y * matrix.bz + self.z * matrix.cz + self.w * matrix.dz

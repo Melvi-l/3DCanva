@@ -2,7 +2,7 @@ from math import cos, sin
 from typing import List
 
 
-class Matrix4:
+class MathMatrix4:
     def __init__(self, 
                  ax=0, bx=0, cx=0, dx=0,
                  ay=0, by=0, cy=0, dy=0,
@@ -48,7 +48,7 @@ class Matrix4:
     @classmethod
     def fromQuaternion(cls, quaternion):
         w, x, y, z = quaternion.w, quaternion.x, quaternion.y, quaternion.z
-        return Matrix4(
+        return MathMatrix4(
             1 - 2*y**2 - 2*z**2, 2*x*y + 2*w*z, 2*x*z - 2*w*y, 0,
             2*x*y - 2*w*z, 1 - 2*x**2 -2*z**2, 2*y*z + 2*w*x, 0,
             2*x*z + 2*w*y, 2*y*z - 2*w*x, 1 - 2*x**2 - 2*y**2, 0,
@@ -82,7 +82,7 @@ class Matrix4:
             0,0,0,0
         )
         result.multiplyScalar(1-cos(angle))
-        result.addMatrix(Matrix4(
+        result.addMatrix(MathMatrix4(
             cos(angle), rotationAxis.z*sin(angle), -rotationAxis.y*sin(angle),0,
             -rotationAxis.z*sin(angle), cos(angle), rotationAxis.x*sin(angle),0,
             rotationAxis.y*sin(angle), -rotationAxis.x*sin(angle), cos(angle),0,
@@ -138,8 +138,8 @@ class Matrix4:
 
         return self
 
-    def multiplyMatrix(self, matrix: 'Matrix4'):
-        temp = Matrix4()
+    def multiplyMatrix(self, matrix: 'MathMatrix4'):
+        temp = MathMatrix4()
         temp.ax = self.ax * matrix.ax + self.bx * matrix.ay + self.cx * matrix.az + self.dx * matrix.aw
         temp.bx = self.ax * matrix.bx + self.bx * matrix.by + self.cx * matrix.bz + self.dx * matrix.bw
         temp.cx = self.ax * matrix.cx + self.bx * matrix.cy + self.cx * matrix.cz + self.dx * matrix.cw
@@ -164,7 +164,7 @@ class Matrix4:
 
         return self
 
-    def addMatrix(self, matrix: 'Matrix4'):
+    def addMatrix(self, matrix: 'MathMatrix4'):
         self.ax += matrix.ax
         self.bx += matrix.bx
         self.cx += matrix.cx
@@ -188,14 +188,14 @@ class Matrix4:
         return self
 
     def getTranspose(self):
-        return Matrix4 (
+        return MathMatrix4 (
             self.ax, self.ay, self.az, self.aw,
             self.bx, self.by, self.bz, self.bw,
             self.cx, self.cy, self.cz, self.cw,
             self.dx, self.dy, self.dz, self.dw
         )
 
-    def getInverse(self) -> 'Matrix4':
+    def getInverse(self) -> 'MathMatrix4':
 
         determinant = self.getDeterminant()
 
@@ -208,7 +208,7 @@ class Matrix4:
 
         return inverse
     
-    def getCofactorMatrix(self) -> 'Matrix4':
+    def getCofactorMatrix(self) -> 'MathMatrix4':
 
         matrixList = self.toList()
         cofactorMatrixList = [[0.0] * 4 for _ in range(4)]
@@ -225,9 +225,9 @@ class Matrix4:
                 sign = 1 if (i + j) % 2 == 0 else -1
                 cofactorMatrixList[i][j] = submatrixDeterminant * sign
 
-        return Matrix4.fromList(cofactorMatrixList)
+        return MathMatrix4.fromList(cofactorMatrixList)
 
-    def copy(self, matrix: 'Matrix4'):    
+    def copy(self, matrix: 'MathMatrix4'):    
         self.ax = matrix.ax
         self.bx = matrix.bx
         self.cx = matrix.cx

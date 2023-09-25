@@ -1,7 +1,8 @@
 import sys
 import pygame
+from debug.GUI import GUI
 from graphic.Camera import OrthographicCamera
-from geom.Matrix4 import Matrix4
+from geom.MathMatrix4 import MathMatrix4
 from graphic.Renderer import Renderer
 from graphic.Scene import Scene
 from graphic.TriangleMesh import TriangleMesh
@@ -43,12 +44,14 @@ cube = TriangleMesh([
     ]
 )
 
+debug = GUI(canva)
 scene.add(cube)
 camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
 renderer = Renderer(canva, width, height)
 v=Vector3(1,0,0)
-renderer.getDrawPosition(v, Matrix4.identity(), camera.projectionMatrix)
+renderer.getDrawPosition(v, MathMatrix4.identity(), camera.projectionMatrix)
 speed = 0.1
+
 def tick():
     while True:
         for event in pygame.event.get():
@@ -79,9 +82,11 @@ def tick():
                 if event.key == pygame.K_KP_8:
                     cube.applyTranslation(Vector3(0,-speed,0))
 
-        
+                if event.key == pygame.K_s:
+                    pass
                 
         canva.fill(background)
         renderer.render(scene, camera)
+        debug.draw()
         pygame.display.flip()
 tick()

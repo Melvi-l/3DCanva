@@ -1,5 +1,5 @@
 from math import cos, sin
-from geom.Matrix4 import Matrix4
+from geom.Matrix import Matrix
 from rotation.Orientation import Orientation
 
 
@@ -10,9 +10,9 @@ class Euler:
         self.bank = bank
 
     def toRotationMatrix(self, orientation = Orientation()):
-        pitchMatrix = Matrix4.rotation(orientation.xAxis, self.pitch)
-        headingMatrix = Matrix4.rotation(orientation.yAxis, self.heading)
-        bankMatrix = Matrix4.rotation(orientation.zAxis, self.bank)
+        pitchMatrix = Matrix.rotation(orientation.xAxis, self.pitch)
+        headingMatrix = Matrix.rotation(orientation.yAxis, self.heading)
+        bankMatrix = Matrix.rotation(orientation.zAxis, self.bank)
         pitchMatrix.multiplyMatrix(headingMatrix)
         bankMatrix.multiplyMatrix(pitchMatrix)
         return bankMatrix

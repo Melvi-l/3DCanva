@@ -1,6 +1,7 @@
 from typing import List
-from geom.Matrix4 import Matrix4
+from geom.Matrix import Matrix
 from rotation.Euler import Euler
+from rotation.Orientation import Orientation
 from rotation.Quaternion import Quaternion
 from geom.Vector3 import Vector3
 
@@ -8,22 +9,17 @@ from geom.Vector3 import Vector3
 class TriangleMesh:
     vertexList: List[Vector3]
     faceList: List[int]
-    modelMatrix: Matrix4
+    modelMatrix: Matrix
     def __init__(self, vertexList, faceList) -> None:
         self.vertexList = vertexList
         self.faceList = faceList
-        self.modelMatrix = Matrix4.identity()
-    def setPosition(self, position: Vector3):
-        self.modelMatrix.dx = position.x 
-        self.modelMatrix.dy = position.y 
-        self.modelMatrix.dz = position.z 
-        return self
+        self.modelMatrix = Matrix.identity()
     def applyScale(self, scaleFactor: float):
-        scaleMatrix = Matrix4.scale(scaleFactor)
+        scaleMatrix = Matrix.scale(scaleFactor)
         self.modelMatrix.multiplyMatrix(scaleMatrix)
         return self
     def applyTranslation(self,translationVector: Vector3):
-        translationMatrix = Matrix4.translation(translationVector)
+        translationMatrix = Matrix.translation(translationVector)
         self.modelMatrix.multiplyMatrix(translationMatrix)
         return self
     def applyRotation(self, rotationAxis: Vector3, angle):
@@ -38,8 +34,8 @@ class TriangleMesh:
         # rotationMatrix = euler.toRotationMatrix()
 
         # Axis-angle
-        rotationAxis.normalize()
-        rotationMatrix = Matrix4.rotation(rotationAxis, angle)
+        # rotationAxis.normalize()
+        # rotationMatrix = Matrix4.rotation(rotationAxis, angle)
 
         # Exponential Map
         # rotationAxis.normalize()
@@ -51,7 +47,9 @@ class TriangleMesh:
 
 
         # Quaternion
-        # quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
-        # rotationMatrix = quaternion.toRotationMatrix()
-        self.modelMatrix.multiplyMatrix(rotationMatrix)
+        quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
+        rotationMatrix = quaternion.toRotationMatrix()
+
+        self.modelMatrix = rotationMatrix.setPosition(self.modelMatrix.getPosition()).multiplyMatrix(self.modelMatrix.setPosition(Vector3()))
+        # self.modelMatrix.multiplyMatrix(rotationMatrix)
         return self

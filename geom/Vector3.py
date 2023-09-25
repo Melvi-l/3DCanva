@@ -1,7 +1,7 @@
 from math import sqrt
 
 class Vector3:
-    def __init__(self, x, y, z) -> None:
+    def __init__(self, x=0, y=0, z=0) -> None:
         self.x = x
         self.y = y
         self.z = z
