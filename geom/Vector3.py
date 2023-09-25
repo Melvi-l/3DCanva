@@ -6,6 +6,16 @@ class Vector3:
         self.y = y
         self.z = z
 
+    @classmethod
+    def xAxis(cls):
+        return cls(1,0,0)
+    @classmethod
+    def yAxis(cls):
+        return cls(0,1,0)
+    @classmethod
+    def zAxis(cls):
+        return cls(0,0,1)
+
     def getSquareMagnitude(self) -> float:
         return self.x**2 + self.y**2 + self.z**2
     
@@ -53,4 +63,5 @@ class Vector3:
     
     def __str__(self) -> str:
         return f"Vector3({self.x}, {self.y}, {self.z})"
-    
+    def __eq__(self, __value: object) -> bool:
+        return self.x == __value.x and self.y == __value.y and self.z == __value.z

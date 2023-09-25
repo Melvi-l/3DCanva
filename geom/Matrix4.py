@@ -79,14 +79,14 @@ class Matrix4:
             rotationAxis.x**2,rotationAxis.x*rotationAxis.y,rotationAxis.x*rotationAxis.z,0,
             rotationAxis.y*rotationAxis.y, rotationAxis.y**2, rotationAxis.y*rotationAxis.z,0,
             rotationAxis.x*rotationAxis.z, rotationAxis.y*rotationAxis.z, rotationAxis.z**2,0,
-            0,0,0,1/(1-cos(angle))
+            0,0,0,0
         )
         result.multiplyScalar(1-cos(angle))
         result.addMatrix(Matrix4(
             cos(angle), rotationAxis.z*sin(angle), -rotationAxis.y*sin(angle),0,
             -rotationAxis.z*sin(angle), cos(angle), rotationAxis.x*sin(angle),0,
             rotationAxis.y*sin(angle), -rotationAxis.x*sin(angle), cos(angle),0,
-            0,0,0,0
+            0,0,0,1
         ))
         print(result)
         return result
@@ -182,6 +182,14 @@ class Matrix4:
         self.bw += matrix.bw
         self.cw += matrix.cw
         self.dw += matrix.dw
+
+    def getTranspose(self):
+        return Matrix4 (
+            self.ax, self.ay, self.az, self.aw,
+            self.bx, self.by, self.bz, self.bw,
+            self.cx, self.cy, self.cz, self.cw,
+            self.dx, self.dy, self.dz, self.dw
+        )
 
     def getInverse(self) -> 'Matrix4':
 
