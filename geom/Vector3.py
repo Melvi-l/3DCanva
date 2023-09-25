@@ -51,9 +51,14 @@ class Vector3:
         return Vector4(self.x,self.y,self.z,1)
     
     @staticmethod
+    def difference(vectorA, vectorB):
+        return Vector3(vectorB.x + vectorA.x, vectorB.y + vectorA.y, vectorB.z + vectorA.z)
+    @staticmethod
+    def difference(vectorA, vectorB):
+        return Vector3(vectorB.x - vectorA.x, vectorB.y - vectorA.y, vectorB.z - vectorA.z)
+    @staticmethod
     def dot(vectorA: 'Vector3', vectorB: 'Vector3') -> float:
         return vectorA.x*vectorB.x + vectorA.y*vectorB.y + vectorA.z*vectorB.z
-    
     @staticmethod
     def cross(vectorA: 'Vector3', vectorB: 'Vector3') -> 'Vector3':
         return Vector3(
@@ -61,7 +66,10 @@ class Vector3:
             vectorA.z * vectorB.x - vectorA.x * vectorB.z, 
             vectorA.x * vectorB.y - vectorA.y * vectorB.x
         )
-    
+    @staticmethod
+    def lerp(vectorA, vectorB, lerpFactor):
+        return Vector3.add(vectorA, Vector3.difference(vectorA, vectorB).multiplyScalar(lerpFactor))
+
     def __str__(self) -> str:
         return f"Vector3({self.x}, {self.y}, {self.z})"
     def __eq__(self, __value: object) -> bool:

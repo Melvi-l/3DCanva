@@ -12,7 +12,6 @@ class Vector4:
 
     def getSquareMagnitude(self) -> float:
         return self.x**2 + self.y**2 + self.z**2 + self.w**2
-    
     def getMagnitude(self) -> float:
         return sqrt(self.getSquareMagnitude())
 
@@ -25,7 +24,6 @@ class Vector4:
         self.z /= magnitude
         self.w /= magnitude
         return self
-
     def negate(self):
         self.x = - self.x
         self.y = - self.y
@@ -39,14 +37,12 @@ class Vector4:
         self.z *= scalar
         self.w *= scalar
         return self
-
     def addVector(self, vector: 'Vector4'):
         self.x += vector.x
         self.y += vector.y
         self.z += vector.z
         self.w += vector.w
         return self
-
     def multiplyMatrix4(self, matrix: Matrix4):
         x = self.x * matrix.ax + self.y * matrix.bx + self.z * matrix.cx + self.w * matrix.dx
         y = self.x * matrix.ay + self.y * matrix.by + self.z * matrix.cy + self.w * matrix.dy

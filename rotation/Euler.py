@@ -31,7 +31,6 @@ class Euler:
         return Euler(eulerB.pitch - eulerA.pitch, eulerB.heading - eulerA.heading, eulerB.bank - eulerA.bank)
     @staticmethod
     def lerp(eulerA, eulerB, lerpFactor):
-        differenceEuler = Euler.difference(eulerA, eulerB)
-        return Euler.add(eulerA, differenceEuler.multiplyScalar())
+        return Euler.add(eulerA, Euler.difference(eulerA, eulerB).multiplyScalar(lerpFactor))
             
     
