@@ -38,17 +38,17 @@ class GUI:
         self.drawFpsText()
         for index in range(len(self.elementList)):
             self.elementList[index].draw(self.screen, self.left, self.top + self.height*index + self.gap*(index-1), self.width, self.height)
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                for element in self.elementList:
-                    if element.button.collidepoint(event.pos):
-                        element.action()
     def drawFpsText(self):
         self.clock.tick(60)
         current_fps = self.clock.get_fps()
         text = pygame.font.Font("C:\Windows\Fonts\8514fix.fon", 24).render(f"{'{:.2f}'.format(current_fps)} FPS", True, YELLOW)
         self.screen.blit(text, (10, 10))
-            
+    def eventHandler(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for element in self.elementList:
+                if element.button.collidepoint(event.pos):
+                    element.action()
+        
 
 
 class DebugElement:

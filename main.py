@@ -29,7 +29,7 @@ scene.add(cube)
 camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
 renderer = Renderer(canva, width, height)
 
-speed = 0.1
+speed = 0.2
 
 # def animateRotation():
 #     print("start")
@@ -37,15 +37,16 @@ speed = 0.1
 
 
 
-# debug.addButton("Slerp", animateRotation)
+debug.addButton("Slerp", lambda: print('print'))
 
 
-async def tick():
+def tick():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            debug.eventHandler(event)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     cube.applyRotation(Vector3(0,1,0), speed)
@@ -70,16 +71,10 @@ async def tick():
                 if event.key == pygame.K_KP_8:
                     cube.applyTranslation(Vector3(0,-speed,0))
 
-                if event.key == pygame.K_s:
-                    pass
-                
-        
    
         canva.fill(background)
         renderer.render(scene, camera)
         debug.draw()
         pygame.display.flip()
 
-if __name__ == '__main__':
-    loop = get_event_loop()
-    loop.run_until_complete(tick())
+tick()
