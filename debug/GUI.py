@@ -1,5 +1,7 @@
 import pygame
 
+from color import RED, YELLOW
+
 WHITE = (255,255,255)
 
 class GUI:
@@ -8,6 +10,7 @@ class GUI:
         self.screen = screen
         self.initPosition()
         self.elementList = []
+        self.clock = pygame.time.Clock()
 
     def initPosition(self):
         # cst
@@ -32,6 +35,7 @@ class GUI:
         self.elementList.append(DebugElement("button", label, action, color))
         self.setDimension()
     def draw(self):
+        self.drawFpsText()
         for index in range(len(self.elementList)):
             self.elementList[index].draw(self.screen, self.left, self.top + self.height*index + self.gap*(index-1), self.width, self.height)
         for event in pygame.event.get():
@@ -39,6 +43,11 @@ class GUI:
                 for element in self.elementList:
                     if element.button.collidepoint(event.pos):
                         element.action()
+    def drawFpsText(self):
+        self.clock.tick(60)
+        current_fps = self.clock.get_fps()
+        text = pygame.font.Font("C:\Windows\Fonts\8514fix.fon", 24).render(f"{'{:.2f}'.format(current_fps)} FPS", True, YELLOW)
+        self.screen.blit(text, (10, 10))
             
 
 

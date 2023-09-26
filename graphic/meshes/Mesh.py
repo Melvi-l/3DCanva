@@ -1,6 +1,8 @@
 from typing import List
 
 import pygame
+from color import YELLOW
+from geom.MathMatrix4 import MathMatrix4
 from geom.Matrix import Matrix
 from rotation.Euler import Euler
 from rotation.Orientation import Orientation
@@ -8,7 +10,7 @@ from rotation.Quaternion import Quaternion
 from geom.Vector3 import Vector3
 
 
-class TriangleMesh:
+class Mesh:
     vertexList: List[Vector3]
     faceList: List[int]
     modelMatrix: Matrix
@@ -16,15 +18,15 @@ class TriangleMesh:
         self.vertexList = vertexList
         self.faceList = faceList
         self.modelMatrix = Matrix.identity()
-    def applyScale(self, scaleFactor: float):
+    def applyScale(self, scaleFactor):
         scaleMatrix = Matrix.scale(scaleFactor)
         self.modelMatrix.multiplyMatrix(scaleMatrix)
         return self
-    def applyTranslation(self,translationVector: Vector3):
+    def applyTranslation(self,translationVector):
         translationMatrix = Matrix.translation(translationVector)
         self.modelMatrix.multiplyMatrix(translationMatrix)
         return self
-    def applyRotation(self, rotationAxis: Vector3, angle):
+    def applyRotation(self, rotationAxis, angle):
         # Euler (TODO-impl: extrinsic)
         # euler = Euler()
         # if rotationAxis == Vector3.xAxis():
@@ -62,15 +64,40 @@ class TriangleMesh:
         self.modelMatrix.setQuaternion(quaternion)
         return self
         
-
     def animateRotationTo(self, duration, endQuaternion):
         clock = pygame.time.Clock()        
         startQuaternion = self.getQuaternion()
-        startTime = clock.get_time()
+        startTime = pygame.time.get_ticks()
         while True: 
-            elapsedTime = clock.get_time() - startTime
-            print(clock.get_time())
+            elapsedTime = pygame.time.get_ticks() - startTime
+            print(elapsedTime)
             if  elapsedTime > duration:
                 break
-            currentQuaternion = Quaternion.slerp(startQuaternion, endQuaternion, elapsedTime)
+            lerpFactor = elapsedTime / duration
+            currentQuaternion = Quaternion.slerp(startQuaternion, endQuaternion, lerpFactor)
             self.setQuaternion(currentQuaternion)
+
+    def draw(self, canva, projectionMatrix, viewportMatrix):
+        for face in self.faceList:
+            self.drawFace(face, canva, projectionMatrix, viewportMatrix)
+        return
+    
+    def drawFace(self, face, canva, projectionMatrix, viewportMatrix):
+        computeVertexList = [self.getDrawPosition(self.vertexList[face[index]], self.modelMatrix, projectionMatrix, viewportMatrix) for index in range(len(face))] # to reduce pipeline and looping around vertex
+        for indexA in range(len(face)):
+            indexB = (indexA+1)%len(face)
+            vertexA = computeVertexList[indexA]
+            vertexB = computeVertexList[indexB]
+            self.drawEdge(canva, vertexA, vertexB)
+
+    def getDrawPosition(self, vertex, modelMatrix, projectionMatrix, viewportMatrix):
+        vertexHomogenous = vertex.toHomogenous()
+        vertexHomogenous.multiplyMatrix4(modelMatrix)
+        vertexHomogenous.multiplyMatrix4(projectionMatrix)
+        vertexHomogenous.multiplyMatrix4(viewportMatrix)
+        return vertexHomogenous
+
+    def drawEdge(self, canva, vertexA, vertexB):
+        # print("draw", vertexA.x, vertexA.y, vertexB.x, vertexB.y)
+        pygame.draw.line(canva, YELLOW, (vertexA.x,
+                     vertexA.y), (vertexB.x, vertexB.y), 1)

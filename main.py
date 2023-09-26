@@ -1,3 +1,4 @@
+from asyncio import get_event_loop
 from math import pi
 import sys
 import pygame
@@ -6,7 +7,8 @@ from graphic.Camera import OrthographicCamera
 from geom.MathMatrix4 import MathMatrix4
 from graphic.Renderer import Renderer
 from graphic.Scene import Scene
-from graphic.TriangleMesh import TriangleMesh
+from graphic.meshes.CubeMesh import CubeMesh
+from graphic.meshes.Mesh import Mesh
 from geom.Vector3 import Vector3
 from rotation.Quaternion import Quaternion
 
@@ -20,51 +22,25 @@ canva.fill(background)
 font = pygame.font.Font(None, 24)  # Utilisation de la police par défaut de Pygame
 
 scene = Scene()
-cube = TriangleMesh([
-    Vector3(-1,-1,-1),
-    Vector3(-1,-1,1),
-    Vector3(-1,1,-1),
-    Vector3(-1,1,1),
-    Vector3(1,-1,-1),
-    Vector3(1,-1,1),
-    Vector3(1,1,-1),
-    Vector3(1,1,1),
-    ],
-    [
-        [0,1,2],
-        [1,3,2],
-        [2,3,7],
-        [2,7,6],
-        [1,7,3],
-        [1,5,7],
-        [4,6,7],
-        [4,7,5],
-        [0,5,1],
-        [0,4,5],
-        [0,2,6],
-        [0,6,4]
-    ]
-)
+cube = CubeMesh(2,2,2)
 
 debug = GUI(canva)
 scene.add(cube)
 camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
 renderer = Renderer(canva, width, height)
-v=Vector3(1,0,0)
-renderer.getDrawPosition(v, MathMatrix4.identity(), camera.projectionMatrix)
+
 speed = 0.1
-clock = pygame.time.Clock()
 
-def animateRotation():
-    print("start")
-    cube.animateRotationTo(1, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
-
+# def animateRotation():
+#     print("start")
+#     cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
 
 
-debug.addButton("Slerp", animateRotation)
+
+# debug.addButton("Slerp", animateRotation)
 
 
-def tick():
+async def tick():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -97,8 +73,13 @@ def tick():
                 if event.key == pygame.K_s:
                     pass
                 
+        
+   
         canva.fill(background)
         renderer.render(scene, camera)
         debug.draw()
         pygame.display.flip()
-tick()
+
+if __name__ == '__main__':
+    loop = get_event_loop()
+    loop.run_until_complete(tick())
