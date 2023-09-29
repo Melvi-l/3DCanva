@@ -100,6 +100,8 @@ class MathMatrix4:
             0,0,0,1
         )
 
+    def getTrace(self):
+        return self.ax + self.by +self.cz + self.dw
     def getDeterminant(self) -> float:
         matrixList = self.toList()
         determinant = 0.

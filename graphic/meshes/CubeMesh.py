@@ -1,5 +1,7 @@
+import pygame
 from geom.Vector3 import Vector3
 from graphic.meshes.Mesh import Mesh
+from rotation.Quaternion import Quaternion
 
 
 class CubeMesh(Mesh):
@@ -27,3 +29,34 @@ class CubeMesh(Mesh):
                 [0,2,6],
                 [0,6,4]
         ])
+
+    # def animateRotationTo(self, duration, endQuaternion):
+    #     clock = pygame.time.Clock()        
+    #     startQuaternion = self.getQuaternion()
+    #     startTime = pygame.time.get_ticks()
+    #     print("start", startQuaternion)
+    #     print("end", endQuaternion)
+    #     while True: 
+    #         elapsedTime = pygame.time.get_ticks() - startTime
+    #         if  elapsedTime > duration:
+    #             break
+    #         lerpFactor = elapsedTime / duration
+    #         currentQuaternion = Quaternion.slerp(startQuaternion, endQuaternion, lerpFactor)
+    #         if elapsedTime % 100 == 0:
+    #             print(lerpFactor, currentQuaternion)
+    #         self.setQuaternion(currentQuaternion)
+    def animateRotationTo(self, duration, euler):
+        clock = pygame.time.Clock()        
+        startQuaternion = self.getQuaternion()
+        startTime = pygame.time.get_ticks()
+        print("start", startQuaternion)
+        print("end", euler)
+        while True: 
+            elapsedTime = pygame.time.get_ticks() - startTime
+            if  elapsedTime > duration:
+                break
+            lerpFactor = elapsedTime / duration
+            currentQuaternion = Quaternion.slerp(startQuaternion, euler, lerpFactor)
+            if elapsedTime % 100 == 0:
+                print(lerpFactor, currentQuaternion)
+            self.setQuaternion(currentQuaternion)

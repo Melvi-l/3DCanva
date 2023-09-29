@@ -1,6 +1,7 @@
 from asyncio import get_event_loop
 from math import pi
 import sys
+from threading import Thread
 import pygame
 from debug.GUI import GUI
 from graphic.Camera import OrthographicCamera
@@ -29,15 +30,16 @@ scene.add(cube)
 camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
 renderer = Renderer(canva, width, height)
 
-speed = 0.2
+speed = 0.3
 
-# def animateRotation():
-#     print("start")
-#     cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
+def animateRotation(cube):
+    thread = Thread(target=animateRotation, args=(cube,))
+    cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
+    thread.start()
 
 
+debug.addButton("Slerp", lambda: animateRotation(cube))
 
-debug.addButton("Slerp", lambda: print('print'))
 
 
 def tick():

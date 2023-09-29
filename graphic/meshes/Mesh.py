@@ -54,8 +54,8 @@ class Mesh:
         quaternion = Quaternion.fromAxisAngle(rotationAxis, angle)
         rotationMatrix = quaternion.toRotationMatrix()
 
-        self.modelMatrix = rotationMatrix.setPosition(self.modelMatrix.getPosition()).multiplyMatrix(self.modelMatrix.setPosition(Vector3()))
-        # self.modelMatrix.multiplyMatrix(rotationMatrix)
+        # self.modelMatrix = rotationMatrix.setPosition(self.modelMatrix.getPosition()).multiplyMatrix(self.modelMatrix.setPosition(Vector3()))
+        self.modelMatrix.multiplyMatrix(rotationMatrix)
         return self
     
     def getQuaternion(self):
@@ -63,19 +63,11 @@ class Mesh:
     def setQuaternion(self, quaternion):
         self.modelMatrix.setQuaternion(quaternion)
         return self
-        
-    def animateRotationTo(self, duration, endQuaternion):
-        clock = pygame.time.Clock()        
-        startQuaternion = self.getQuaternion()
-        startTime = pygame.time.get_ticks()
-        while True: 
-            elapsedTime = pygame.time.get_ticks() - startTime
-            print(elapsedTime)
-            if  elapsedTime > duration:
-                break
-            lerpFactor = elapsedTime / duration
-            currentQuaternion = Quaternion.slerp(startQuaternion, endQuaternion, lerpFactor)
-            self.setQuaternion(currentQuaternion)
+    def getEuler(self):
+        return self.modelMatrix.getQuaternion()
+    def setEuler(self, quaternion):
+        self.modelMatrix.setQuaternion(quaternion)
+        return self
 
     def draw(self, canva, projectionMatrix, viewportMatrix):
         for face in self.faceList:
