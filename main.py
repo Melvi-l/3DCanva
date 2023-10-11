@@ -3,9 +3,12 @@ from math import pi
 import sys
 from threading import Thread
 import pygame
+from debug.AxesHelper import AxesHelper
 from debug.GUI import GUI
-from graphic.Camera import OrthographicCamera
+from geom.Matrix import Matrix
+from graphic.Camera.OrthographicCamera import OrthographicCamera
 from geom.MathMatrix4 import MathMatrix4
+from graphic.Camera.PerspectiveCamera import PerspectiveCamera
 from graphic.Renderer import Renderer
 from graphic.Scene import Scene
 from graphic.meshes.CubeMesh import CubeMesh
@@ -23,26 +26,43 @@ canva.fill(background)
 font = pygame.font.Font(None, 24)  # Utilisation de la police par défaut de Pygame
 
 scene = Scene()
-cube = CubeMesh(2,2,2)
-
-debug = GUI(canva)
-scene.add(cube)
-camera = OrthographicCamera(-4,4,4,-4,0.1,1000)
+camera = PerspectiveCamera(45,width/height)
+# camera = OrthographicCamera(-5,5,5,-5,0.1,1000)
 renderer = Renderer(canva, width, height)
 
-speed = 0.3
+# DEBUG
+debug = GUI(canva)
+scene.debug = debug
 
-def animateRotation(cube):
-    thread = Thread(target=animateRotation, args=(cube,))
-    cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
-    thread.start()
+# CUBE
+cube = CubeMesh(2,2,2)
+scene.add(cube)
+# axesHelper = AxesHelper()
+# scene.add(axesHelper)
 
 
-debug.addButton("Slerp", lambda: animateRotation(cube))
+# def animateRotation(cube):
+#     thread = Thread(target=animateRotation, args=(cube,))
+#     cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
+#     thread.start()
 
 
+# debug.addButton("Slerp", lambda: animateRotation(cube))
+
+
+matrix = Matrix(
+    0, 0, 1, 0,
+    0, 1, 0, 0,
+    -1, 0, 0, 0,
+    0, 0, -5, 1
+)
+
+inv = matrix.getInverse()
+
+Matrix.multiply
 
 def tick():
+    speed = 0.3
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,7 +96,6 @@ def tick():
    
         canva.fill(background)
         renderer.render(scene, camera)
-        debug.draw()
         pygame.display.flip()
 
 tick()

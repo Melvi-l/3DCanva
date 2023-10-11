@@ -70,8 +70,21 @@ class Vector3:
     def lerp(vectorA, vectorB, lerpFactor):
         return Vector3.add(vectorA, Vector3.difference(vectorA, vectorB).multiplyScalar(lerpFactor))
 
+    def copy(self, vector) -> 'Vector3':
+        self.x = vector.x
+        self.y = vector.y
+        self.z = vector.z
+        return self
     def __str__(self) -> str:
         return f"Vector3({self.x}, {self.y}, {self.z})"
     def __eq__(self, __value: object) -> bool:
         return self.x == __value.x and self.y == __value.y and self.z == __value.z
     
+    def getDrawPosition(self, modelMatrix, viewMatrix, projectionMatrix, viewportMatrix):
+        vertexHomogenous = self.toHomogenous()
+        vertexHomogenous.y *= -1
+        vertexHomogenous.multiplyMatrix4(modelMatrix)
+        vertexHomogenous.multiplyMatrix4(viewMatrix)
+        vertexHomogenous.multiplyMatrix4(projectionMatrix)
+        vertexHomogenous.multiplyMatrix4(viewportMatrix)
+        return vertexHomogenous

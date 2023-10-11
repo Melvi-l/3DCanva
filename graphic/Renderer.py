@@ -1,7 +1,9 @@
 from typing import List
 
 import pygame
-from graphic.Camera import OrthographicCamera
+from debug.GUI import GUI
+from graphic.Camera.Camera import Camera
+from graphic.Camera.OrthographicCamera import OrthographicCamera
 from geom.MathMatrix4 import MathMatrix4
 from graphic.Scene import Scene
 from graphic.meshes.Mesh import Mesh
@@ -15,11 +17,12 @@ class Renderer:
     def __init__(self, canva, width, height) -> None:
         self.initViewportMatrix(width, height)
         self.canva = canva
+
         return
     
     def initViewportMatrix(self, width, height):
-        originX = 0 
-        originY = 0
+        originX = 0.5 
+        originY = 0.5
         nearDepth = 0
         farDepth = 1
         self.viewportMatrix = MathMatrix4(
@@ -28,10 +31,11 @@ class Renderer:
             0, 0, (farDepth-nearDepth)/2, (nearDepth+farDepth)/2,
             0, 0, 0, 1  
         )
+        print("viewport matrix: \n", self.viewportMatrix)
 
-    def render(self, scene: Scene, camera):
-        for mesh in scene.meshList:
-            mesh.draw(self.canva, camera.projectionMatrix, self.viewportMatrix)
+
+    def render(self, scene: Scene, camera: Camera):
+        scene.draw(self.canva, camera.viewMatrix, camera.projectionMatrix, self.viewportMatrix)
         return
     
 

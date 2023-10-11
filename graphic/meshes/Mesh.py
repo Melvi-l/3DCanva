@@ -69,25 +69,18 @@ class Mesh:
         self.modelMatrix.setQuaternion(quaternion)
         return self
 
-    def draw(self, canva, projectionMatrix, viewportMatrix):
+    def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix):
         for face in self.faceList:
-            self.drawFace(face, canva, projectionMatrix, viewportMatrix)
+            self.drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix)
         return
     
-    def drawFace(self, face, canva, projectionMatrix, viewportMatrix):
-        computeVertexList = [self.getDrawPosition(self.vertexList[face[index]], self.modelMatrix, projectionMatrix, viewportMatrix) for index in range(len(face))] # to reduce pipeline and looping around vertex
+    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix):
+        computeVertexList = [self.vertexList[face[index]].getDrawPosition(self.modelMatrix, viewMatrix, projectionMatrix, viewportMatrix) for index in range(len(face))] # to reduce pipeline and looping around vertex
         for indexA in range(len(face)):
             indexB = (indexA+1)%len(face)
             vertexA = computeVertexList[indexA]
             vertexB = computeVertexList[indexB]
             self.drawEdge(canva, vertexA, vertexB)
-
-    def getDrawPosition(self, vertex, modelMatrix, projectionMatrix, viewportMatrix):
-        vertexHomogenous = vertex.toHomogenous()
-        vertexHomogenous.multiplyMatrix4(modelMatrix)
-        vertexHomogenous.multiplyMatrix4(projectionMatrix)
-        vertexHomogenous.multiplyMatrix4(viewportMatrix)
-        return vertexHomogenous
 
     def drawEdge(self, canva, vertexA, vertexB):
         # print("draw", vertexA.x, vertexA.y, vertexB.x, vertexB.y)

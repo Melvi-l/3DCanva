@@ -17,16 +17,19 @@ class Matrix(MathMatrix4):
             Vector3(self.bx, self.by, self.bz),
             Vector3(self.cx, self.cy, self.cz),
         )
-    def setPosition(self, position):
-        self.dx = position.x 
-        self.dy = position.y 
-        self.dz = position.z 
+    def setPosition(self, positionVector):
+        self.dx = positionVector.x 
+        self.dy = positionVector.y 
+        self.dz = positionVector.z 
         return self
     def setOrientation(self, orientation):
         self.ax, self.ay, self.az = orientation.xAxis.x, orientation.xAxis.y, orientation.xAxis.z
         self.bx, self.by, self.bz = orientation.yAxis.x, orientation.yAxis.y, orientation.yAxis.z
         self.cx, self.cy, self.cz = orientation.zAxis.x, orientation.zAxis.y, orientation.zAxis.z
         return self
+    
+    def lookAt(self, target):
+        pass
 
 
     # def getQuaternion(self):
@@ -90,15 +93,3 @@ class Matrix(MathMatrix4):
         self.bx, self.by, self.bz = rotationMatrix.bx, rotationMatrix.by, rotationMatrix.bz
         self.cx, self.cy, self.cz = rotationMatrix.cx, rotationMatrix.cy, rotationMatrix.cz
         return self
-    
-matrix = Matrix(
-    1,7,5,0,
-    9,8,1,0,
-    7,8,3,0,
-    0,0,0,1
-)
-print(matrix)
-quaternion = matrix.getQuaternion()
-print(quaternion)
-matrixFromQ = quaternion.toRotationMatrix()
-print(matrixFromQ)

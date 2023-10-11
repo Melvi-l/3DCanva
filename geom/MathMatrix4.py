@@ -88,7 +88,6 @@ class MathMatrix4:
             rotationAxis.y*sin(angle), -rotationAxis.x*sin(angle), cos(angle),0,
             0,0,0,1
         ))
-        print(result)
         return result
 
     @classmethod
@@ -113,8 +112,8 @@ class MathMatrix4:
             subDeterminant = getSubmatrixDeterminant(submatrix)
             sign = 1 if (i + j) % 2 == 0 else -1
             determinant += sign * matrixList[i][j] * subDeterminant
-            if subDeterminant != 0 and matrixList[i][j] != 0: 
-                print("sub", matrixList[i][j], subDeterminant)
+            # if subDeterminant != 0 and matrixList[i][j] != 0: 
+            #     print("sub", matrixList[i][j], subDeterminant)
         return determinant
 
     def multiplyScalar(self, scalar: float):
@@ -265,9 +264,34 @@ class MathMatrix4:
                f"         [{self.az}, {self.bz}, {self.cz}, {self.dz}]\n" \
                f"         [{self.aw}, {self.bw}, {self.cw}, {self.dw}]"
     
+    @staticmethod
+    def multiply(matrixA, matrixB):
+        result = MathMatrix4()
+        
+        result.ax = matrixA.ax * matrixB.ax + matrixA.bx * matrixB.ay + matrixA.cx * matrixB.az + matrixA.dx * matrixB.aw
+        result.bx = matrixA.ax * matrixB.bx + matrixA.bx * matrixB.by + matrixA.cx * matrixB.bz + matrixA.dx * matrixB.bw
+        result.cx = matrixA.ax * matrixB.cx + matrixA.bx * matrixB.cy + matrixA.cx * matrixB.cz + matrixA.dx * matrixB.cw
+        result.dx = matrixA.ax * matrixB.dx + matrixA.bx * matrixB.dy + matrixA.cx * matrixB.dz + matrixA.dx * matrixB.dw
+
+        result.ay = matrixA.ay * matrixB.ax + matrixA.by * matrixB.ay + matrixA.cy * matrixB.az + matrixA.dy * matrixB.aw
+        result.by = matrixA.ay * matrixB.bx + matrixA.by * matrixB.by + matrixA.cy * matrixB.bz + matrixA.dy * matrixB.bw
+        result.cy = matrixA.ay * matrixB.cx + matrixA.by * matrixB.cy + matrixA.cy * matrixB.cz + matrixA.dy * matrixB.cw
+        result.dy = matrixA.ay * matrixB.dx + matrixA.by * matrixB.dy + matrixA.cy * matrixB.dz + matrixA.dy * matrixB.dw
+
+        result.az = matrixA.az * matrixB.ax + matrixA.bz * matrixB.ay + matrixA.cz * matrixB.az + matrixA.dz * matrixB.aw
+        result.bz = matrixA.az * matrixB.bx + matrixA.bz * matrixB.by + matrixA.cz * matrixB.bz + matrixA.dz * matrixB.bw
+        result.cz = matrixA.az * matrixB.cx + matrixA.bz * matrixB.cy + matrixA.cz * matrixB.cz + matrixA.dz * matrixB.cw
+        result.dz = matrixA.az * matrixB.dx + matrixA.bz * matrixB.dy + matrixA.cz * matrixB.dz + matrixA.dz * matrixB.dw
+
+        result.aw = matrixA.aw * matrixB.ax + matrixA.bw * matrixB.ay + matrixA.cw * matrixB.az + matrixA.dw * matrixB.aw
+        result.bw = matrixA.aw * matrixB.bx + matrixA.bw * matrixB.by + matrixA.cw * matrixB.bz + matrixA.dw * matrixB.bw
+        result.cw = matrixA.aw * matrixB.cx + matrixA.bw * matrixB.cy + matrixA.cw * matrixB.cz + matrixA.dw * matrixB.cw
+        result.dw = matrixA.aw * matrixB.dx + matrixA.bw * matrixB.dy + matrixA.cw * matrixB.dz + matrixA.dw * matrixB.dw
+
+        return result
+    
 
 def getSubmatrixDeterminant(matrix: List[List[float]]):
-    print(matrix)
     return (
             (matrix[0][0] * matrix[1][1] * matrix[2][2] + 
              matrix[0][1] * matrix[1][2] * matrix[2][0] +
