@@ -37,29 +37,37 @@ scene.debug = debug
 # CUBE
 cube = CubeMesh(2,2,2)
 scene.add(cube)
-# axesHelper = AxesHelper()
-# scene.add(axesHelper)
+axesHelper = AxesHelper()
+scene.add(axesHelper)
 
 
-# def animateRotation(cube):
-#     thread = Thread(target=animateRotation, args=(cube,))
-#     cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
-#     thread.start()
+def animateRotation(cube):
+    thread = Thread(target=animateRotation, args=(cube,))
+    cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
+    thread.start()
 
 
-# debug.addButton("Slerp", lambda: animateRotation(cube))
+debug.addButton("Slerp", lambda: animateRotation(cube))
 
 
-matrix = Matrix(
-    0, 0, 1, 0,
-    0, 1, 0, 0,
-    -1, 0, 0, 0,
-    0, 0, -5, 1
-)
-
-inv = matrix.getInverse()
-
-Matrix.multiply
+# matrixTy = Matrix(
+#     6, 8, 1, 0,
+#     0, 1, 4, 0,
+#     -1, 10, 0, 0,
+#     0, 0, -5, 1
+# )
+# matrix = Matrix(
+#     1,1,1,-1,
+#     1,1,-1,1,
+#     1,-1,1,1,
+#     -1,1,1,1
+# )
+# suppInv = Matrix(
+#     0.14760, -0.03960, -0.11439, 0,
+#     0.01476, -0.00369, 0.08856, 0,
+#     -0.00369, 0.25092, -0.02214, 0, 
+#     -0.01845, 1.25461, -0.11070, 1
+# ) 
 
 def tick():
     speed = 0.3

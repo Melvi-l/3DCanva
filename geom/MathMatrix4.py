@@ -1,6 +1,8 @@
 from math import cos, sin
 from typing import List
 
+from geom.MathMatrix3 import MathMatrix3
+
 
 class MathMatrix4:
     def __init__(self, 
@@ -197,9 +199,9 @@ class MathMatrix4:
         )
 
     def getInverse(self) -> 'MathMatrix4':
-
+        print("get inverse of ", self)
         determinant = self.getDeterminant()
-
+        print(determinant) 
         if determinant == 0:
             raise ValueError("InversionError: Null determinant")
 
@@ -210,22 +212,27 @@ class MathMatrix4:
         return inverse
     
     def getCofactorMatrix(self) -> 'MathMatrix4':
-
+        print("\n\n\n\n")
         matrixList = self.toList()
         cofactorMatrixList = [[0.0] * 4 for _ in range(4)]
-
+        print("MATRIX", self)
         for i in range(4):
             for j in range(4):
+                print(f"SUB {i},{j}")
                 submatrix = [[matrixList[m][n] for n in range(4) if n != j] for m in range(4) if m != i]
-                submatrixDeterminant = (submatrix[0][0] * submatrix[1][1] * submatrix[2][2] -
-                    submatrix[0][0] * submatrix[1][2] * submatrix[2][1] -
-                    submatrix[0][1] * submatrix[1][0] * submatrix[2][2] +
-                    submatrix[0][1] * submatrix[1][2] * submatrix[2][0] +
-                    submatrix[0][2] * submatrix[1][0] * submatrix[2][1] -
-                    submatrix[0][2] * submatrix[1][1] * submatrix[2][0])
+                print(MathMatrix3.fromList(submatrix))
+                # submatrixDeterminant = (
+                #     submatrix[0][0] * submatrix[1][1] * submatrix[2][2] -
+                #     submatrix[0][0] * submatrix[1][2] * submatrix[2][1] -
+                #     submatrix[0][1] * submatrix[1][0] * submatrix[2][2] +
+                #     submatrix[0][1] * submatrix[1][2] * submatrix[2][0] +
+                #     submatrix[0][2] * submatrix[1][0] * submatrix[2][1] -
+                #     submatrix[0][2] * submatrix[1][1] * submatrix[2][0])
+                submatrixDeterminant = getSubmatrixDeterminant(submatrix)
                 sign = 1 if (i + j) % 2 == 0 else -1
-                cofactorMatrixList[i][j] = submatrixDeterminant * sign
-
+                cofactorMatrixList[j][i] = submatrixDeterminant * sign
+                print(MathMatrix4.fromList(cofactorMatrixList))
+        print("\n\n\n\n")
         return MathMatrix4.fromList(cofactorMatrixList)
 
     def copy(self, matrix: 'MathMatrix4'):    
@@ -259,10 +266,10 @@ class MathMatrix4:
         ]
 
     def __str__(self) -> str:
-        return f"Matrix4: [{self.ax}, {self.bx}, {self.cx}, {self.dx}]\n" \
-               f"         [{self.ay}, {self.by}, {self.cy}, {self.dy}]\n" \
-               f"         [{self.az}, {self.bz}, {self.cz}, {self.dz}]\n" \
-               f"         [{self.aw}, {self.bw}, {self.cw}, {self.dw}]"
+        return f"Matrix4: [{'{:.2f}'.format(self.ax)}, {'{:.2f}'.format(self.bx)}, {'{:.2f}'.format(self.cx)}, {'{:.2f}'.format(self.dx)}]\n" \
+               f"         [{'{:.2f}'.format(self.ay)}, {'{:.2f}'.format(self.by)}, {'{:.2f}'.format(self.cy)}, {'{:.2f}'.format(self.dy)}]\n" \
+               f"         [{'{:.2f}'.format(self.az)}, {'{:.2f}'.format(self.bz)}, {'{:.2f}'.format(self.cz)}, {'{:.2f}'.format(self.dz)}]\n" \
+               f"         [{'{:.2f}'.format(self.aw)}, {'{:.2f}'.format(self.bw)}, {'{:.2f}'.format(self.cw)}, {'{:.2f}'.format(self.dw)}]"
     
     @staticmethod
     def multiply(matrixA, matrixB):
@@ -300,4 +307,16 @@ def getSubmatrixDeterminant(matrix: List[List[float]]):
              matrix[2][1] * matrix[1][2] * matrix[0][0] +
              matrix[2][2] * matrix[1][0] * matrix[0][1])
            )
-            
+
+
+    
+# print("\n")
+# matrixList = [
+#     [1, 3, 4],
+#     [8, 5, 6],
+#     [7, 9, 5],
+# ]         
+# matrix = MathMatrix3.fromList(matrixList)
+# print(matrix)
+# det = getSubmatrixDeterminant(matrixList)
+# print(det)
