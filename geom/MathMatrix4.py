@@ -199,9 +199,9 @@ class MathMatrix4:
         )
 
     def getInverse(self) -> 'MathMatrix4':
-        print("get inverse of ", self)
+        # print("get inverse of ", self)
         determinant = self.getDeterminant()
-        print(determinant) 
+        # print(determinant) 
         if determinant == 0:
             raise ValueError("InversionError: Null determinant")
 
@@ -212,27 +212,20 @@ class MathMatrix4:
         return inverse
     
     def getCofactorMatrix(self) -> 'MathMatrix4':
-        print("\n\n\n\n")
+        # print("\n\n\n\n")
         matrixList = self.toList()
         cofactorMatrixList = [[0.0] * 4 for _ in range(4)]
-        print("MATRIX", self)
+        # print("MATRIX", self)
         for i in range(4):
             for j in range(4):
-                print(f"SUB {i},{j}")
+                # print(f"SUB {i},{j}")
                 submatrix = [[matrixList[m][n] for n in range(4) if n != j] for m in range(4) if m != i]
-                print(MathMatrix3.fromList(submatrix))
-                # submatrixDeterminant = (
-                #     submatrix[0][0] * submatrix[1][1] * submatrix[2][2] -
-                #     submatrix[0][0] * submatrix[1][2] * submatrix[2][1] -
-                #     submatrix[0][1] * submatrix[1][0] * submatrix[2][2] +
-                #     submatrix[0][1] * submatrix[1][2] * submatrix[2][0] +
-                #     submatrix[0][2] * submatrix[1][0] * submatrix[2][1] -
-                #     submatrix[0][2] * submatrix[1][1] * submatrix[2][0])
+                # print(MathMatrix3.fromList(submatrix))
                 submatrixDeterminant = getSubmatrixDeterminant(submatrix)
                 sign = 1 if (i + j) % 2 == 0 else -1
                 cofactorMatrixList[j][i] = submatrixDeterminant * sign
-                print(MathMatrix4.fromList(cofactorMatrixList))
-        print("\n\n\n\n")
+                # print(MathMatrix4.fromList(cofactorMatrixList))
+        # print("\n\n\n\n")
         return MathMatrix4.fromList(cofactorMatrixList)
 
     def copy(self, matrix: 'MathMatrix4'):    

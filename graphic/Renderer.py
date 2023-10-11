@@ -21,8 +21,8 @@ class Renderer:
         return
     
     def initViewportMatrix(self, width, height):
-        originX = 0.5 
-        originY = 0.5
+        originX = 0 
+        originY = 0
         nearDepth = 0
         farDepth = 1
         self.viewportMatrix = MathMatrix4(

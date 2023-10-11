@@ -5,4 +5,8 @@ class Camera:
     projectionMatrix: Matrix
 
     def updateViewMatrix(self):
+        # self.viewMatrix = Matrix.multiply(
+        #     Matrix.identity().setOrientation(self.cameraMatrix.getOrientation()).getInverse(), 
+        #     Matrix.identity().setPosition(self.cameraMatrix.getPosition()).getInverse()
+        # )
         self.viewMatrix = self.cameraMatrix.getInverse()

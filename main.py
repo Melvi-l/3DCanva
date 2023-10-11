@@ -26,7 +26,7 @@ canva.fill(background)
 font = pygame.font.Font(None, 24)  # Utilisation de la police par défaut de Pygame
 
 scene = Scene()
-camera = PerspectiveCamera(45,width/height)
+camera = PerspectiveCamera(100,width/height)
 # camera = OrthographicCamera(-5,5,5,-5,0.1,1000)
 renderer = Renderer(canva, width, height)
 
@@ -40,6 +40,17 @@ scene.add(cube)
 axesHelper = AxesHelper()
 scene.add(axesHelper)
 
+x = Vector3(1,0,0)
+y = Vector3(0,1,0)
+z = Vector3(1,1,-1000)
+print(Vector3(1,2,3).toHomogenous().multiplyMatrix4(Matrix(
+    0, 1, 0, 0,
+    1, 0, 0, 0,
+    0, 0, 1, 0, 
+    0, 0, 0, 1,
+)))
+print(z.toHomogenous().multiplyMatrix4(camera.viewMatrix))
+
 
 def animateRotation(cube):
     thread = Thread(target=animateRotation, args=(cube,))
@@ -48,7 +59,9 @@ def animateRotation(cube):
 
 
 debug.addButton("Slerp", lambda: animateRotation(cube))
-
+debug.addButton("showCameraParams", lambda: print("\n\n\tcamera orientation: \n", camera.cameraMatrix.getOrientation(),
+                                                  "\n\n\tcamera position: \n", camera.cameraMatrix.getPosition(),
+                                                  "\n\nmerci\n\n"))
 
 # matrixTy = Matrix(
 #     6, 8, 1, 0,

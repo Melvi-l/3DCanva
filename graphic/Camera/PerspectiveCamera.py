@@ -6,12 +6,12 @@ from rotation.Orientation import Orientation
 
 
 class PerspectiveCamera(Camera):
-    def __init__(self, fovInDeg, aspectRatio, near=.1, far=1000):
+    def __init__(self, fovInDeg, aspectRatio, near=.1, far=100):
         self.initCameraMatrix()
         self.initProjectionMatrix(fovInDeg, aspectRatio, near, far)
 
     def initCameraMatrix(self):
-        eyeVector = Vector3(5,0,0)
+        eyeVector = Vector3(0,0,5)
         targetVector = Vector3(0,0,0)
         direction = Vector3.difference(eyeVector, targetVector)
         z = Vector3().copy(direction).negate().normalize()
@@ -30,11 +30,17 @@ class PerspectiveCamera(Camera):
     def initProjectionMatrix(self, fovInDeg, aspectRatio, near, far):
         fovInRad = radians(fovInDeg)
         d = 1 / tan(fovInRad/2)
+        # self.projectionMatrix = Matrix(
+        #     d/aspectRatio, 0, 0, 0,
+        #     0, d, 0, 0,
+        #     0, 0, (near + far) / (near - far), -near*far/(near-far),
+        #     0, 0, 1, 0
+        # )
         self.projectionMatrix = Matrix(
             d/aspectRatio, 0, 0, 0,
             0, d, 0, 0,
-            0, 0, (near + far) / (near - far), 2*near*far/(near-far),
-            0, 0, -1, 0
+            0, 0, (near + far) / (near - far), 1,
+            0, 0, -near*far/(near-far), 0
         )
         print("projection matrix: \n", self.projectionMatrix)
 
