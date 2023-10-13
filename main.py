@@ -15,7 +15,9 @@ from graphic.meshes.CubeMesh import CubeMesh
 from graphic.meshes.HoverableCubeMesh import HoverableCubeMesh
 from graphic.meshes.Mesh import Mesh
 from geom.Vector3 import Vector3
+from light.DirectionalLight import DirectionalLight
 from rotation.Quaternion import Quaternion
+from rotation.RotationAnimation import RotationAnimation
 
 
 pygame.init()
@@ -41,47 +43,9 @@ scene.add(cube)
 axesHelper = AxesHelper()
 scene.add(axesHelper)
 
-x = Vector3.x()
-y = Vector3.y()
-z = Vector3(1,1,-10)
-print(z.toHomogenous(), " *")
-print(camera.projectionMatrix)
-print()
-print(z.toHomogenous().multiplyMatrix4(camera.projectionMatrix))
-
-
-
-class RotationAnimation:
-    def __init__(self, object: CubeMesh):
-        self.duration = 0
-        self.time = 0
-        self.object = object
-        self.originQuaternion = Quaternion()
-        self.targetQuaternion = Quaternion()
-
-    @property
-    def isActive(self):
-        return self.time < self.duration
-    
-    def animateRotationTo(self, time, targetQuaternion):
-        self.time = 0
-        self.duration = time
-        self.originQuaternion = self.object.getQuaternion()
-        print(self.originQuaternion)
-        self.targetQuaternion = targetQuaternion
-        print(self.targetQuaternion)
-
-    def animateRotationOf(self, time, rotationQuaternion):
-        targetQuaternion = Quaternion.multiply(self.object.getQuaternion(), rotationQuaternion)
-        self.animateRotationTo(time, targetQuaternion)
-
-    def update(self, elapsedTime):
-        if (self.duration == 0):
-            return 
-        self.time += elapsedTime 
-        lerpFactor = self.time / self.duration
-        currentQuaternion = Quaternion.slerp(self.originQuaternion, self.targetQuaternion, lerpFactor)
-        self.object.setQuaternion(currentQuaternion)
+# LIGHT
+light = DirectionalLight(Vector3(1,1,-1))
+scene.light = light
 
 rotate = RotationAnimation(cube)
 
@@ -91,24 +55,6 @@ debug.addButton("showCameraParams", lambda: print("\n\n\tcamera orientation: \n"
                                                   "\n\n\tcamera position: \n", camera.cameraMatrix.getPosition(),
                                                   "\n\nmerci\n\n"))
 
-# matrixTy = Matrix(
-#     6, 8, 1, 0,
-#     0, 1, 4, 0,
-#     -1, 10, 0, 0,
-#     0, 0, -5, 1
-# )
-# matrix = Matrix(
-#     1,1,1,-1,
-#     1,1,-1,1,
-#     1,-1,1,1,
-#     -1,1,1,1
-# )
-# suppInv = Matrix(
-#     0.14760, -0.03960, -0.11439, 0,
-#     0.01476, -0.00369, 0.08856, 0,
-#     -0.00369, 0.25092, -0.02214, 0, 
-#     -0.01845, 1.25461, -0.11070, 1
-# ) 
 def tick():
     speed = 0.3
     clock = pygame.time.Clock()

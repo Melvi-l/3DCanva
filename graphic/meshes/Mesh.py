@@ -71,19 +71,21 @@ class Mesh:
         self.modelMatrix.setQuaternion(quaternion)
         return self
     
-    def getFaceNormal(self, faceIndex):
-        # 
-        pass
-    def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix):
+    def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix, light):
         for face in self.faceList:
-            self.drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix)
+            print(light)
+            self.drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix, light)
         return
     
-    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix, backfaceCulling = True):
+    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix, light, backfaceCulling = True):
         computeVertexList = [self.vertexList[face[index]].getDrawPosition(self.modelMatrix, viewMatrix, projectionMatrix, viewportMatrix) for index in range(len(face))] # to reduce pipeline and looping around vertex
         if not(backfaceCulling) or self.isTriangleFacing(computeVertexList):
             if self.solid:
-                self.fillFace(canva, computeVertexList)
+                color = WHITE
+                print(light)
+                if light:
+                    color = WHITE * light.computeReflexion(self.getTriangleNormal(computeVertexList))
+                self.fillFace(canva, computeVertexList, color)
                 return
             for indexA in range(len(face)):
                 indexB = (indexA+1)%len(face)
@@ -101,6 +103,12 @@ class Mesh:
 
     def isTriangleFacing(self, faceVertexList):
         return self.sign(*faceVertexList) < 0
+    
+    def getTriangleNormal(self, faceVertexList):
+        a,b,c = faceVertexList
+        edgeAB = Vector3.difference(a,b)
+        edgeAC = Vector3.difference(a,c)
+        return Vector3.cross(edgeAB, edgeAC).normalize()
     
     def sign(self, a, b, c):
         return (a.x - c.x) * (b.y - c.y) - (b.x - c.x) * (a.y - c.y)

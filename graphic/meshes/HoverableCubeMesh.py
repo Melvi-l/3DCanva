@@ -13,12 +13,12 @@ class HoverableCubeMesh(CubeMesh):
     mousePosition = (0,0)
     barycentricCoord = ""
 
-    def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix):
+    def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix, light):
         self.drawBarycentricCoord(canva)
         self.barycentricCoord = ""
-        super().draw(canva, viewMatrix, projectionMatrix, viewportMatrix)
+        super().draw(canva, viewMatrix, projectionMatrix, viewportMatrix, light)
 
-    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix, backfaceCulling = False):
+    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix, light=0, backfaceCulling = False):
         if self.solid:
             super().drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix,backfaceCulling)
             return
