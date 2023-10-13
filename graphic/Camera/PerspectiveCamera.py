@@ -6,7 +6,7 @@ from rotation.Orientation import Orientation
 
 
 class PerspectiveCamera(Camera):
-    def __init__(self, fovInDeg, aspectRatio, near=.1, far=100):
+    def __init__(self, fovInDeg, aspectRatio, near=.1, far=1000):
         self.initCameraMatrix()
         self.initProjectionMatrix(fovInDeg, aspectRatio, near, far)
 
@@ -15,9 +15,8 @@ class PerspectiveCamera(Camera):
         targetVector = Vector3(0,0,0)
         direction = Vector3.difference(eyeVector, targetVector)
         z = Vector3().copy(direction).negate().normalize()
-        x = Vector3.cross(direction, Vector3(0,1,0)).normalize()
+        x = Vector3.cross(direction, Vector3.y()).normalize()
         y = Vector3.cross(z, x)
-        print(" x: ",x , "\n", "y: ", y, "\n", "z: ", z)
         self.cameraMatrix = Matrix(
             x.x, y.x, z.x, eyeVector.x,
             x.y, y.y, z.y, eyeVector.y,
@@ -33,8 +32,8 @@ class PerspectiveCamera(Camera):
         self.projectionMatrix = Matrix(
             d/aspectRatio, 0, 0, 0,
             0, d, 0, 0,
-            0, 0, (near + far) / (near - far), -near*far/(near-far),
-            0, 0, 1, 0
+            0, 0, (near + far) / (near - far), 2*near*far/(near-far),
+            0, 0, -1, 0
         )
         # self.projectionMatrix = Matrix(
         #     d/aspectRatio, 0, 0, 0,
@@ -44,26 +43,4 @@ class PerspectiveCamera(Camera):
         # )
         print("projection matrix: \n", self.projectionMatrix)
 
-    def setPosition(self, positionVector):
-        self.cameraMatrix.setPosition(positionVector)
-        self.updateViewMatrix()
-
-    def setOrientation(self, orientationVector):
-        self.cameraMatrix.setOrientation(orientationVector)
-        self.updateViewMatrix()
-
-    def rotate(self, rotationAxis, angle):
-        rotationMatrix = Matrix.rotation(rotationAxis, angle)
-        self.cameraMatrix.multiplyMatrix(rotationMatrix)
-        self.updateViewMatrix()
-
-    def lookAt(self, targetVector = Vector3()):
-        eyeVector = self.cameraMatrix.getPosition()
-        direction = Vector3.difference(eyeVector, targetVector)
-        z = Vector3().copy(direction).negate().normalize()
-        x = Vector3.cross(direction, Vector3(0,1,0)).normalize()
-        y = Vector3.cross(z, x)
-        orientation = Orientation(x,y,z)
-        self.cameraMatrix.setOrientation(orientation)
-        self.updateViewMatrix()
 

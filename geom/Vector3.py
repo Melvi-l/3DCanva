@@ -7,13 +7,13 @@ class Vector3:
         self.z = z
 
     @classmethod
-    def xAxis(cls):
+    def x(cls):
         return cls(1,0,0)
     @classmethod
-    def yAxis(cls):
+    def y(cls):
         return cls(0,1,0)
     @classmethod
-    def zAxis(cls):
+    def z(cls):
         return cls(0,0,1)
 
     def getSquareMagnitude(self) -> float:
@@ -24,7 +24,7 @@ class Vector3:
     def normalize(self):
         magnitude = self.getMagnitude()
         if magnitude == 0:
-            return
+            return self
         self.x /= magnitude
         self.y /= magnitude
         self.z /= magnitude
@@ -51,7 +51,7 @@ class Vector3:
         return Vector4(self.x,self.y,self.z,1)
     
     @staticmethod
-    def difference(vectorA, vectorB):
+    def add(vectorA, vectorB):
         return Vector3(vectorB.x + vectorA.x, vectorB.y + vectorA.y, vectorB.z + vectorA.z)
     @staticmethod
     def difference(vectorA, vectorB):
@@ -79,7 +79,12 @@ class Vector3:
         return f"Vector3({self.x}, {self.y}, {self.z})"
     def __eq__(self, __value: object) -> bool:
         return self.x == __value.x and self.y == __value.y and self.z == __value.z
-    
+    @staticmethod
+    def isColinear(vectorA, vectorB):
+        uVectorA = vectorA.normalize()
+        uVectorB = vectorB.normalize()
+        return uVectorA == uVectorB or uVectorA.negate() == uVectorB
+
     def getDrawPosition(self, modelMatrix, viewMatrix, projectionMatrix, viewportMatrix):
         vertexHomogenous = self.toHomogenous()
         vertexHomogenous.multiplyMatrix4(modelMatrix)
@@ -87,3 +92,4 @@ class Vector3:
         vertexHomogenous.multiplyMatrix4(projectionMatrix)
         vertexHomogenous.multiplyMatrix4(viewportMatrix)
         return vertexHomogenous
+    

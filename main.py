@@ -12,6 +12,7 @@ from graphic.Camera.PerspectiveCamera import PerspectiveCamera
 from graphic.Renderer import Renderer
 from graphic.Scene import Scene
 from graphic.meshes.CubeMesh import CubeMesh
+from graphic.meshes.HoverableCubeMesh import HoverableCubeMesh
 from graphic.meshes.Mesh import Mesh
 from geom.Vector3 import Vector3
 from rotation.Quaternion import Quaternion
@@ -27,7 +28,7 @@ font = pygame.font.Font(None, 24)  # Utilisation de la police par défaut de Pyg
 
 scene = Scene()
 # camera = PerspectiveCamera(100,width/height)
-camera = OrthographicCamera(-5,5,5,-5,0.1,1000)
+camera = OrthographicCamera(-5,5,5,-5,0.1,1000).setPosition(Vector3(1,1,1)).lookAt(Vector3(0,0,0))
 renderer = Renderer(canva, width, height)
 
 # DEBUG
@@ -35,13 +36,13 @@ debug = GUI(canva)
 scene.debug = debug
 
 # CUBE
-cube = CubeMesh(2,2,2)
+cube = HoverableCubeMesh(2,2,2, solid=True)
 scene.add(cube)
 axesHelper = AxesHelper()
 scene.add(axesHelper)
 
-x = Vector3(1,0,0)
-y = Vector3(0,1,0)
+x = Vector3.x()
+y = Vector3.y()
 z = Vector3(1,1,-10)
 print(z.toHomogenous(), " *")
 print(camera.projectionMatrix)
@@ -123,15 +124,16 @@ def tick():
                 pygame.quit()
                 sys.exit()
             debug.eventHandler(event)
+            cube.eventHandler(event)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    cube.applyRotation(Vector3(0,1,0), speed)
+                    cube.applyRotation(Vector3.y(), -speed)
                 if event.key == pygame.K_RIGHT:
-                    cube.applyRotation(Vector3(0,1,0), -speed)
+                    cube.applyRotation(Vector3.y(), speed)
                 if event.key == pygame.K_UP:
-                    cube.applyRotation(Vector3(1,0,0), -speed)
+                    cube.applyRotation(Vector3.x(), speed)
                 if event.key == pygame.K_DOWN:
-                    cube.applyRotation(Vector3(1,0,0), speed)
+                    cube.applyRotation(Vector3.x(), -speed)
                     
                 if event.key == pygame.K_KP_PLUS:
                     cube.applyScale(1.1)
@@ -139,13 +141,22 @@ def tick():
                     cube.applyScale(0.9)
 
                 if event.key == pygame.K_KP_4:
-                    cube.applyTranslation(Vector3(1,0,0).multiplyScalar(-speed))
+                    cube.applyTranslation(Vector3.x().multiplyScalar(-speed))
                 if event.key == pygame.K_KP_6:
-                    cube.applyTranslation(Vector3(1,0,0).multiplyScalar(speed))
+                    cube.applyTranslation(Vector3.x().multiplyScalar(speed))
                 if event.key == pygame.K_KP_2:
-                    cube.applyTranslation(Vector3(0,1,0).multiplyScalar(-speed))
+                    cube.applyTranslation(Vector3.y().multiplyScalar(-speed))
                 if event.key == pygame.K_KP_8:
-                    cube.applyTranslation(Vector3(0,1,0).multiplyScalar(speed))
+                    cube.applyTranslation(Vector3.y().multiplyScalar(speed))
+
+                if event.key == pygame.K_x: # X view
+                    camera.setPosition(Vector3.x()).lookAt()
+                if event.key == pygame.K_y: # Y view
+                    camera.setPosition(Vector3.y()).lookAt()
+                if event.key == pygame.K_z: # Z view
+                    camera.setPosition(Vector3.z()).lookAt()
+                if event.key == pygame.K_h: # Hybrid view
+                    camera.setPosition(Vector3(1,1,1)).lookAt()
 
         if (rotate.isActive):
             rotate.update(elapsedTime)

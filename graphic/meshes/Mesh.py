@@ -1,7 +1,7 @@
 from typing import List
 
 import pygame
-from color import YELLOW
+from color import WHITE, YELLOW
 from geom.MathMatrix4 import MathMatrix4
 from geom.Matrix import Matrix
 from rotation.Euler import Euler
@@ -14,10 +14,12 @@ class Mesh:
     vertexList: List[Vector3]
     faceList: List[int]
     modelMatrix: Matrix
-    def __init__(self, vertexList, faceList) -> None:
+    solid: bool
+    def __init__(self, vertexList, faceList, solid = False) -> None:
         self.vertexList = vertexList
         self.faceList = faceList
         self.modelMatrix = Matrix.identity()
+        self.solid = solid
     def applyScale(self, scaleFactor):
         scaleMatrix = Matrix.scale(scaleFactor)
         self.modelMatrix.multiplyMatrix(scaleMatrix)
@@ -29,11 +31,11 @@ class Mesh:
     def applyRotation(self, rotationAxis, angle):
         # Euler (TODO-impl: extrinsic)
         # euler = Euler()
-        # if rotationAxis == Vector3.xAxis():
+        # if rotationAxis == Vector3.x()Axis():
         #     euler = Euler(angle, 0, 0)
-        # if rotationAxis == Vector3.yAxis():
+        # if rotationAxis == Vector3.y()Axis():
         #     euler = Euler(0, angle, 0)
-        # if rotationAxis == Vector3.xAxis():
+        # if rotationAxis == Vector3.x()Axis():
         #     euler = Euler(0, 0, angle)
         # rotationMatrix = euler.toRotationMatrix()
 
@@ -77,15 +79,28 @@ class Mesh:
             self.drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix)
         return
     
-    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix):
+    def drawFace(self, face, canva, viewMatrix, projectionMatrix, viewportMatrix, backfaceCulling = True):
         computeVertexList = [self.vertexList[face[index]].getDrawPosition(self.modelMatrix, viewMatrix, projectionMatrix, viewportMatrix) for index in range(len(face))] # to reduce pipeline and looping around vertex
-        for indexA in range(len(face)):
-            indexB = (indexA+1)%len(face)
-            vertexA = computeVertexList[indexA]
-            vertexB = computeVertexList[indexB]
-            self.drawEdge(canva, vertexA, vertexB)
+        if not(backfaceCulling) or self.isTriangleFacing(computeVertexList):
+            if self.solid:
+                self.fillFace(canva, computeVertexList)
+                return
+            for indexA in range(len(face)):
+                indexB = (indexA+1)%len(face)
+                vertexA = computeVertexList[indexA]
+                vertexB = computeVertexList[indexB]
+                self.drawEdge(canva, vertexA, vertexB)
 
-    def drawEdge(self, canva, vertexA, vertexB):
+    def fillFace(self, canva, vertexList, color=WHITE):
+        pygame.draw.polygon(canva, color, [(vertex.x, vertex.y) for vertex in vertexList])
+
+    def drawEdge(self, canva, vertexA, vertexB, color = YELLOW, width = 1):
         # print("draw", vertexA.x, vertexA.y, vertexB.x, vertexB.y)
-        pygame.draw.line(canva, YELLOW, (vertexA.x,
-                     vertexA.y), (vertexB.x, vertexB.y), 1)
+        pygame.draw.line(canva, color, (vertexA.x,
+                     vertexA.y), (vertexB.x, vertexB.y), width)
+
+    def isTriangleFacing(self, faceVertexList):
+        return self.sign(*faceVertexList) < 0
+    
+    def sign(self, a, b, c):
+        return (a.x - c.x) * (b.y - c.y) - (b.x - c.x) * (a.y - c.y)

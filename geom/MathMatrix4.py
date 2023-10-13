@@ -199,7 +199,7 @@ class MathMatrix4:
         )
 
     def getInverse(self) -> 'MathMatrix4':
-        # print("get inverse of ", self)
+        # print("get inverse of \n", self)
         determinant = self.getDeterminant()
         # print(determinant) 
         if determinant == 0:

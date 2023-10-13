@@ -54,6 +54,15 @@ class Vector4:
         self.w = w
         return self
 
+    @staticmethod
+    def add(vectorA, vectorB):
+        result = Vector4()
+        result.x = vectorA.x + vectorB.x
+        result.y = vectorA.y + vectorB.y
+        result.z = vectorA.z + vectorB.z
+        result.w = vectorA.w + vectorB.w
+        return result
+    
     def copy(self, vector):
         self.x = vector.x
         self.y = vector.y

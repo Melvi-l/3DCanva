@@ -10,11 +10,11 @@ class AxesHelper:
         self.createHelper()
     def createHelper(self):
         origin = Vector3()
-        self.xAxisLine = (origin, Vector3(1,0,0).multiplyScalar(self.helperSize))
+        self.xAxisLine = (origin, Vector3.x().multiplyScalar(self.helperSize))
         self.xAxisColor = RED
-        self.yAxisLine = (origin, Vector3(0,1,0).multiplyScalar(self.helperSize))
+        self.yAxisLine = (origin, Vector3.y().multiplyScalar(self.helperSize))
         self.yAxisColor = GREEN
-        self.zAxisLine = (origin, Vector3(0,0,1).multiplyScalar(self.helperSize))
+        self.zAxisLine = (origin, Vector3.z().multiplyScalar(self.helperSize))
         self.zAxisColor = BLUE
     def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix):
         self.drawLine(self.xAxisLine, self.xAxisColor, canva, viewMatrix, projectionMatrix, viewportMatrix)

@@ -9,7 +9,7 @@ from geom.Vector3 import Vector3
 
 class Renderer:
 
-    viewportMatrix: MathMatrix4
+    viewportMatrix: MathMatrix4 
 
     def __init__(self, canva, width, height) -> None:
         self.initViewportMatrix(width, height)

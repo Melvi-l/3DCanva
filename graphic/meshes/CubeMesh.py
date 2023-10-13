@@ -5,7 +5,7 @@ from rotation.Quaternion import Quaternion
 
 
 class CubeMesh(Mesh):
-    def __init__(self, width, height, depth) -> None:
+    def __init__(self, width, height, depth, solid) -> None:
         super().__init__([
             Vector3(-width/2,-height/2,-depth/2),
             Vector3(-width/2,-height/2,depth/2),
@@ -28,7 +28,7 @@ class CubeMesh(Mesh):
                 [0,4,5],
                 [0,2,6],
                 [0,6,4]
-        ])
+        ], solid)
 
     # def animateRotationTo(self, duration, endQuaternion):
     #     clock = pygame.time.Clock()        
