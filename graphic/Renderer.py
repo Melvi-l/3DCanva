@@ -1,7 +1,4 @@
 from typing import List
-
-import pygame
-from debug.GUI import GUI
 from graphic.Camera.Camera import Camera
 from graphic.Camera.OrthographicCamera import OrthographicCamera
 from geom.MathMatrix4 import MathMatrix4
@@ -27,8 +24,8 @@ class Renderer:
         farDepth = 1
         self.viewportMatrix = MathMatrix4(
             width/2, 0, 0, originX + width/2,
-            0, height/2, 0, originY + height/2,
-            0, 0, (farDepth-nearDepth)/2, (nearDepth+farDepth)/2,
+            0, -height/2, 0, originY + height/2,
+            0, 0, -(farDepth-nearDepth)/2, (nearDepth+farDepth)/2,
             0, 0, 0, 1  
         )
         print("viewport matrix: \n", self.viewportMatrix)
@@ -38,4 +35,3 @@ class Renderer:
         scene.draw(self.canva, camera.viewMatrix, camera.projectionMatrix, self.viewportMatrix)
         return
     
-

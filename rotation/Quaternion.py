@@ -25,6 +25,8 @@ class Quaternion:
         return self.w**2 + self.x**2 + self.y**2 + self.z**2
     def getLength(self):
         return sqrt(self.getSquareLength())
+    def isIdentity(self):
+        return abs(self.w) == 1
     def isUnitary(self):
         return self.getSquareLength() == 1 or self.getSquareLength() == 0
     def getConjugate(self):
@@ -33,8 +35,9 @@ class Quaternion:
         conjugate = self.getConjugate()
         return Quaternion.multiplyScalar(conjugate, 1 / conjugate.getLength()) 
     def getExponentiation(self, exponent):
-        if self.isUnitary(): 
+        if self.isIdentity(): 
             return self
+        print(self.w)
         alpha = acos(self.w)
         newAlpha = alpha * exponent
         mult = sin(newAlpha) / sin(alpha)
@@ -108,4 +111,4 @@ class Quaternion:
         )
     
     def __str__(self) -> str:
-        return f"{self.w}, {self.x}, {self.y}, {self.z}, "
+        return f"Quaternion: [{self.w}, {self.x}, {self.y}, {self.z}] "

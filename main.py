@@ -26,8 +26,8 @@ canva.fill(background)
 font = pygame.font.Font(None, 24)  # Utilisation de la police par défaut de Pygame
 
 scene = Scene()
-camera = PerspectiveCamera(100,width/height)
-# camera = OrthographicCamera(-5,5,5,-5,0.1,1000)
+# camera = PerspectiveCamera(100,width/height)
+camera = OrthographicCamera(-5,5,5,-5,0.1,1000)
 renderer = Renderer(canva, width, height)
 
 # DEBUG
@@ -42,23 +42,50 @@ scene.add(axesHelper)
 
 x = Vector3(1,0,0)
 y = Vector3(0,1,0)
-z = Vector3(1,1,-1000)
-print(Vector3(1,2,3).toHomogenous().multiplyMatrix4(Matrix(
-    0, 1, 0, 0,
-    1, 0, 0, 0,
-    0, 0, 1, 0, 
-    0, 0, 0, 1,
-)))
-print(z.toHomogenous().multiplyMatrix4(camera.viewMatrix))
+z = Vector3(1,1,-10)
+print(z.toHomogenous(), " *")
+print(camera.projectionMatrix)
+print()
+print(z.toHomogenous().multiplyMatrix4(camera.projectionMatrix))
 
 
-def animateRotation(cube):
-    thread = Thread(target=animateRotation, args=(cube,))
-    cube.animateRotationTo(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), 2*pi/3))
-    thread.start()
+
+class RotationAnimation:
+    def __init__(self, object: CubeMesh):
+        self.duration = 0
+        self.time = 0
+        self.object = object
+        self.originQuaternion = Quaternion()
+        self.targetQuaternion = Quaternion()
+
+    @property
+    def isActive(self):
+        return self.time < self.duration
+    
+    def animateRotationTo(self, time, targetQuaternion):
+        self.time = 0
+        self.duration = time
+        self.originQuaternion = self.object.getQuaternion()
+        print(self.originQuaternion)
+        self.targetQuaternion = targetQuaternion
+        print(self.targetQuaternion)
+
+    def animateRotationOf(self, time, rotationQuaternion):
+        targetQuaternion = Quaternion.multiply(self.object.getQuaternion(), rotationQuaternion)
+        self.animateRotationTo(time, targetQuaternion)
+
+    def update(self, elapsedTime):
+        if (self.duration == 0):
+            return 
+        self.time += elapsedTime 
+        lerpFactor = self.time / self.duration
+        currentQuaternion = Quaternion.slerp(self.originQuaternion, self.targetQuaternion, lerpFactor)
+        self.object.setQuaternion(currentQuaternion)
+
+rotate = RotationAnimation(cube)
 
 
-debug.addButton("Slerp", lambda: animateRotation(cube))
+debug.addButton("Slerp", lambda: rotate.animateRotationOf(1000, Quaternion.fromAxisAngle(Vector3(1,0.75,0), pi/3)))
 debug.addButton("showCameraParams", lambda: print("\n\n\tcamera orientation: \n", camera.cameraMatrix.getOrientation(),
                                                   "\n\n\tcamera position: \n", camera.cameraMatrix.getPosition(),
                                                   "\n\nmerci\n\n"))
@@ -81,10 +108,16 @@ debug.addButton("showCameraParams", lambda: print("\n\n\tcamera orientation: \n"
 #     -0.00369, 0.25092, -0.02214, 0, 
 #     -0.01845, 1.25461, -0.11070, 1
 # ) 
-
 def tick():
     speed = 0.3
+    clock = pygame.time.Clock()
+    framerate=60
+    lastTime = pygame.time.get_ticks()
     while True:
+        clock.tick(framerate)
+        currentTime = pygame.time.get_ticks()
+        elapsedTime = currentTime - lastTime
+        lastTime = currentTime
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -106,14 +139,17 @@ def tick():
                     cube.applyScale(0.9)
 
                 if event.key == pygame.K_KP_4:
-                    cube.applyTranslation(Vector3(-speed,0,0))
+                    cube.applyTranslation(Vector3(1,0,0).multiplyScalar(-speed))
                 if event.key == pygame.K_KP_6:
-                    cube.applyTranslation(Vector3(speed,0,0))
+                    cube.applyTranslation(Vector3(1,0,0).multiplyScalar(speed))
                 if event.key == pygame.K_KP_2:
-                    cube.applyTranslation(Vector3(0,speed,0))
+                    cube.applyTranslation(Vector3(0,1,0).multiplyScalar(-speed))
                 if event.key == pygame.K_KP_8:
-                    cube.applyTranslation(Vector3(0,-speed,0))
+                    cube.applyTranslation(Vector3(0,1,0).multiplyScalar(speed))
 
+        if (rotate.isActive):
+            rotate.update(elapsedTime)
+            
    
         canva.fill(background)
         renderer.render(scene, camera)

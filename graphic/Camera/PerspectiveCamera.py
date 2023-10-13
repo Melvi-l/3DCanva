@@ -30,18 +30,18 @@ class PerspectiveCamera(Camera):
     def initProjectionMatrix(self, fovInDeg, aspectRatio, near, far):
         fovInRad = radians(fovInDeg)
         d = 1 / tan(fovInRad/2)
-        # self.projectionMatrix = Matrix(
-        #     d/aspectRatio, 0, 0, 0,
-        #     0, d, 0, 0,
-        #     0, 0, (near + far) / (near - far), -near*far/(near-far),
-        #     0, 0, 1, 0
-        # )
         self.projectionMatrix = Matrix(
             d/aspectRatio, 0, 0, 0,
             0, d, 0, 0,
-            0, 0, (near + far) / (near - far), 1,
-            0, 0, -near*far/(near-far), 0
+            0, 0, (near + far) / (near - far), -near*far/(near-far),
+            0, 0, 1, 0
         )
+        # self.projectionMatrix = Matrix(
+        #     d/aspectRatio, 0, 0, 0,
+        #     0, d, 0, 0,
+        #     0, 0, (near + far) / (near - far), 1,
+        #     0, 0, -near*far/(near-far), 0
+        # )
         print("projection matrix: \n", self.projectionMatrix)
 
     def setPosition(self, positionVector):

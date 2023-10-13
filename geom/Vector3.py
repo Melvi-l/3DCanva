@@ -82,7 +82,6 @@ class Vector3:
     
     def getDrawPosition(self, modelMatrix, viewMatrix, projectionMatrix, viewportMatrix):
         vertexHomogenous = self.toHomogenous()
-        vertexHomogenous.y *= -1
         vertexHomogenous.multiplyMatrix4(modelMatrix)
         vertexHomogenous.multiplyMatrix4(viewMatrix)
         vertexHomogenous.multiplyMatrix4(projectionMatrix)

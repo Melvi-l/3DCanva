@@ -68,7 +68,10 @@ class Mesh:
     def setEuler(self, quaternion):
         self.modelMatrix.setQuaternion(quaternion)
         return self
-
+    
+    def getFaceNormal(self, faceIndex):
+        # 
+        pass
     def draw(self, canva, viewMatrix, projectionMatrix, viewportMatrix):
         for face in self.faceList:
             self.drawFace(face, canva, viewMatrix, projectionMatrix, viewportMatrix)
